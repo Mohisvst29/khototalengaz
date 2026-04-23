@@ -27,6 +27,7 @@ const Footer = () => {
     whatsapp: "966567337666"
   };
   const social = settings?.social || {};
+  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966567337666";
 
   return (
     <footer className="footer" id="mainFooter">
@@ -80,7 +81,7 @@ const Footer = () => {
                   <i className="fab fa-tiktok"></i>
                 </a>
               )}
-              <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/${sanitizedWhatsapp}`} target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-whatsapp"></i>
               </a>
             </div>

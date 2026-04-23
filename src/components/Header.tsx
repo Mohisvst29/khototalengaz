@@ -51,6 +51,8 @@ const Header = () => {
   const contact = settings?.contact || { whatsapp: "966567337666" };
   const announcement = settings?.announcement || { enabled: true, text: "", textEn: "", color: "#1a3a5c", speed: 30 };
 
+  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966567337666";
+
   return (
     <>
       <header className={`header ${isScrolled ? "scrolled" : ""}`} id="header">
@@ -79,7 +81,7 @@ const Header = () => {
               {locale === "ar" ? "EN" : "عربي"}
             </button>
             <a
-              href={`https://wa.me/${contact.whatsapp}`}
+              href={`https://wa.me/${sanitizedWhatsapp}`}
               target="_blank"
               className="btn btn-whatsapp"
             >
@@ -117,7 +119,7 @@ const Header = () => {
           }}
         >
           <a
-            href={`https://wa.me/${contact.whatsapp}`}
+            href={`https://wa.me/${sanitizedWhatsapp}`}
             target="_blank"
             className="btn btn-whatsapp"
             style={{ width: "100%", justifyContent: "center" }}

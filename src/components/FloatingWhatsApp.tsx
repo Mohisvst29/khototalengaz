@@ -10,7 +10,8 @@ const FloatingWhatsApp = () => {
       .then(res => res.json())
       .then(data => {
         if (data?.contact?.whatsapp) {
-          setWhatsapp(data.contact.whatsapp);
+          const sanitized = data.contact.whatsapp.replace(/\D/g, "");
+          setWhatsapp(sanitized);
         }
       })
       .catch(() => {});
