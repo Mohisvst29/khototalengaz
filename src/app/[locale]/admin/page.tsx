@@ -28,7 +28,11 @@ export default function AdminPage() {
     messages: [],
     settings: {
       branding: { logo: "/logo.png", logoSize: 50 },
-      hero: { title: "", titleEn: "", subtitle: "", subtitleEn: "", media: "", mediaType: "image" },
+      hero: { 
+        title: "", titleEn: "", subtitle: "", subtitleEn: "", 
+        slides: [{ url: "", type: "image" }],
+        media: "", mediaType: "image" 
+      },
       announcement: { 
         text: "نطور مشاريع عقارية بمعايير عالمية تناسب تطلعاتكم", 
         textEn: "Developing world-class real estate projects that meet your aspirations", 
@@ -468,35 +472,72 @@ export default function AdminPage() {
                 <textarea className="form-control" value={data.settings.hero.subtitleEn} onChange={e => updateSetting('hero', 'subtitleEn', e.target.value)} />
               </div>
             </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>نوع الوسائط</label>
-                <select className="form-control" value={data.settings.hero.mediaType} onChange={e => updateSetting('hero', 'mediaType', e.target.value)}>
-                  <option value="image">صورة</option>
-                  <option value="video">فيديو</option>
-                </select>
+            <div style={{ marginTop: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                <h4 style={{ margin: 0, color: 'var(--primary)', fontSize: '16px' }}>صور وفيديوهات الرئيسية (Slide Show)</h4>
+                <button type="button" className="btn btn-sm btn-outline" onClick={() => {
+                  const newSlides = [...(data.settings.hero.slides || [])];
+                  newSlides.push({ url: "", type: "image" });
+                  updateSetting('hero', 'slides', newSlides);
+                }}>إضافة شريحة +</button>
               </div>
-              <div className="form-group">
-                <label>رفع ملف (صورة/فيديو)</label>
-                <input type="file" onChange={async (e) => {
-                  const files = e.target.files;
-                  if (!files?.[0]) return;
-                  const file = files[0];
-                  const isVideo = file.type.startsWith('video/') || 
-                                  file.name.toLowerCase().endsWith('.mp4') || 
-                                  file.name.toLowerCase().endsWith('.webm') || 
-                                  file.name.toLowerCase().endsWith('.mov');
-                  
-                  const fd = new FormData();
-                  fd.append("files", file);
-                  const res = await fetch("/api/upload", { method: "POST", body: fd });
-                  const resData = await res.json();
-                  if (resData.urls?.[0]) {
-                    updateSetting('hero', 'media', resData.urls[0]);
-                    updateSetting('hero', 'mediaType', isVideo ? 'video' : 'image');
-                    toast.success(isVideo ? "تم رفع الفيديو بنجاح" : "تم رفع الصورة بنجاح");
-                  }
-                }} />
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '15px' }}>
+                {(data.settings.hero.slides || []).map((slide: any, index: number) => (
+                  <div key={index} style={{ padding: '15px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                      <span style={{ fontWeight: '600' }}>شريحة #{index + 1}</span>
+                      <button type="button" style={{ color: 'var(--danger)', border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => {
+                        const newSlides = data.settings.hero.slides.filter((_: any, i: number) => i !== index);
+                        updateSetting('hero', 'slides', newSlides);
+                      }}><i className="fas fa-trash"></i></button>
+                    </div>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>نوع الوسائط</label>
+                        <select className="form-control" value={slide.type} onChange={e => {
+                          const newSlides = [...data.settings.hero.slides];
+                          newSlides[index].type = e.target.value;
+                          updateSetting('hero', 'slides', newSlides);
+                        }}>
+                          <option value="image">صورة</option>
+                          <option value="video">فيديو</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>رفع ملف (صورة/فيديو)</label>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                          {slide.url && (
+                            slide.type === 'video' ? 
+                              <div style={{ width: '50px', height: '40px', background: '#000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-video" style={{ color: 'white', fontSize: '12px' }}></i></div> :
+                              <img src={slide.url} alt="" style={{ width: '50px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
+                          )}
+                          <input type="file" onChange={async (e) => {
+                            const files = e.target.files;
+                            if (!files?.[0]) return;
+                            const file = files[0];
+                            const isVideo = file.type.startsWith('video/') || 
+                                            file.name.toLowerCase().endsWith('.mp4') || 
+                                            file.name.toLowerCase().endsWith('.webm') || 
+                                            file.name.toLowerCase().endsWith('.mov');
+                            
+                            const fd = new FormData();
+                            fd.append("files", file);
+                            const res = await fetch("/api/upload", { method: "POST", body: fd });
+                            const resData = await res.json();
+                            if (resData.urls?.[0]) {
+                              const newSlides = [...data.settings.hero.slides];
+                              newSlides[index].url = resData.urls[0];
+                              newSlides[index].type = isVideo ? 'video' : 'image';
+                              updateSetting('hero', 'slides', newSlides);
+                              toast.success("تم الرفع بنجاح");
+                            }
+                          }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -42,6 +42,19 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
     }
   }, [initialProperties.length, initialBlogs.length]);
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = (settings?.hero?.slides && settings.hero.slides.length > 0) 
+    ? settings.hero.slides 
+    : [{ url: settings?.hero?.media || "/hero-bg.jpg", type: settings?.hero?.mediaType || "image" }];
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
     <div className="page active" id="page-home">
       <LeadModal isOpen={isLeadModalOpen} onClose={() => setIsLeadModalOpen(false)} />
@@ -49,30 +62,44 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
       {/* Hero Section */}
       <section className="hero">
         <div id="heroMediaContainer" className="hero-media-container">
-          {hero.mediaType === 'video' ? (
-            <video 
-              src={hero.media} 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              className="hero-video active"
-              style={{ objectFit: "cover", width: "100%", height: "100%" }}
-            />
-          ) : (
-            <div className="hero-media-item active">
-              <Image 
-                src={hero.media} 
-                alt={locale === 'ar' ? hero.title : hero.titleEn}
-                fill
-                priority
-                style={{ objectFit: "cover" }}
-                sizes="100vw"
-              />
+          {slides.map((slide: any, index: number) => (
+            <div 
+              key={index} 
+              className={`hero-media-item ${index === currentSlide ? 'active' : ''}`}
+              style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                width: '100%', 
+                height: '100%', 
+                opacity: index === currentSlide ? 1 : 0,
+                transition: 'opacity 1s ease-in-out',
+                zIndex: index === currentSlide ? 1 : 0
+              }}
+            >
+              {slide.type === 'video' ? (
+                <video 
+                  src={slide.url} 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                />
+              ) : (
+                <Image 
+                  src={slide.url} 
+                  alt={locale === 'ar' ? hero.title : hero.titleEn}
+                  fill
+                  priority={index === 0}
+                  style={{ objectFit: "cover" }}
+                  sizes="100vw"
+                />
+              )}
             </div>
-          )}
+          ))}
         </div>
-        <div className="hero-overlay"></div>
+        <div className="hero-overlay" style={{ zIndex: 2 }}></div>
         <div className="hero-content">
           <div
             className="hero-text"

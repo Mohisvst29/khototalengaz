@@ -11,8 +11,14 @@ const SettingsSchema = new Schema(
       titleEn: { type: String, default: "Khotot Al-Engaz Real Estate" },
       subtitle: { type: String, default: "نحن هنا لنساعدك في العثور على بيت أحلامك" },
       subtitleEn: { type: String, default: "We are here to help you find your dream home" },
-      media: { type: String, default: "/hero-bg.jpg" },
-      mediaType: { type: String, enum: ["image", "video"], default: "image" },
+      slides: [
+        {
+          url: { type: String, default: "/hero-bg.jpg" },
+          type: { type: String, enum: ["image", "video"], default: "image" },
+        }
+      ],
+      media: { type: String, default: "/hero-bg.jpg" }, // Fallback
+      mediaType: { type: String, enum: ["image", "video"], default: "image" }, // Fallback
     },
     announcement: {
       text: { type: String, default: "عرض خاص: وحدات سكنية جديدة في شمال الرياض" },
