@@ -5,7 +5,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 
-// ✅ Types (المهم)
+/* ================= TYPES ================= */
+
 type SettingsType = {
   branding: { logo: string; logoSize: number };
   hero: {
@@ -47,14 +48,14 @@ type DashboardData = {
   settings: SettingsType;
 };
 
+/* ================= COMPONENT ================= */
+
 export default function AdminPage() {
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
 
-  const [currentPage, setCurrentPage] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ الحل الحقيقي هنا
   const [data, setData] = useState<DashboardData>({
     properties: [],
     projects: [],
@@ -71,9 +72,8 @@ export default function AdminPage() {
         mediaType: "image",
       },
       announcement: {
-        text: "نطور مشاريع عقارية بمعايير عالمية تناسب تطلعاتكم",
-        textEn:
-          "Developing world-class real estate projects that meet your aspirations",
+        text: "",
+        textEn: "",
         color: "#1a3a5c",
         speed: 30,
         enabled: true,
@@ -95,30 +95,29 @@ export default function AdminPage() {
     },
   });
 
-  const [loading, setLoading] = useState(true);
+  /* ================= FETCH ================= */
 
   const fetchData = async () => {
-    setLoading(true);
     try {
-      const [propsRes, projectsRes, requestsRes, messagesRes, settingsRes] =
-        await Promise.all([
-          fetch("/api/properties"),
-          fetch("/api/projects"),
-          fetch("/api/requests"),
-          fetch("/api/messages"),
-          fetch("/api/settings"),
-        ]);
+      setLoading(true);
 
-      const [properties, projects, requests, messages, settings] =
-        await Promise.all([
-          propsRes.json().then((d) => (Array.isArray(d) ? d : [])),
-          projectsRes.json().then((d) => (Array.isArray(d) ? d : [])),
-          requestsRes.json().then((d) => (Array.isArray(d) ? d : [])),
-          messagesRes.json().then((d) => (Array.isArray(d) ? d : [])),
-          settingsRes.json(),
-        ]);
+      const res = await Promise.all([
+        fetch("/api/properties"),
+        fetch("/api/projects"),
+        fetch("/api/requests"),
+        fetch("/api/messages"),
+        fetch("/api/settings"),
+      ]);
 
-      setData((prev) => ({
+      const json = await Promise.all(res.map((r) => r.json()));
+
+      const properties = Array.isArray(json[0]) ? json[0] : [];
+      const projects = Array.isArray(json[1]) ? json[1] : [];
+      const requests = Array.isArray(json[2]) ? json[2] : [];
+      const messages = Array.isArray(json[3]) ? json[3] : [];
+      const settings = json[4];
+
+      setData((prev: DashboardData) => ({
         ...prev,
         properties,
         projects,
@@ -127,7 +126,8 @@ export default function AdminPage() {
         settings:
           settings && !settings.error ? settings : prev.settings,
       }));
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Error fetching data");
     } finally {
       setLoading(false);
@@ -137,6 +137,8 @@ export default function AdminPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  /* ================= UI ================= */
 
   return (
     <div style={{ padding: "40px", textAlign: "center" }}>
