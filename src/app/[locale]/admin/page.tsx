@@ -5,15 +5,25 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 
+type DashboardData = {
+  properties: any[];
+  projects: any[];
+  blogs: any[];
+  requests: any[];
+  messages: any[];
+  settings: any;
+};
+
 export default function AdminPage() {
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
   
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [data, setData] = useState<any>({
+  const [data, setData] = useState<DashboardData>({
     properties: [],
     projects: [],
+    blogs: [],
     requests: [],
     messages: [],
     settings: {
@@ -32,7 +42,12 @@ export default function AdminPage() {
         { title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
         { title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
         { title: "", titleEn: "", description: "", descriptionEn: "", image: "" }
-      ]
+      ],
+      seo: {
+        metaTitle: "", metaTitleEn: "",
+        metaDescription: "", metaDescriptionEn: "",
+        keywords: "", keywordsEn: ""
+      }
     },
   });
   const [activeSettingsTab, setActiveSettingsTab] = useState("branding");
@@ -44,17 +59,19 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [propsRes, projectsRes, requestsRes, messagesRes, settingsRes] = await Promise.all([
+      const [propsRes, projectsRes, blogRes, requestsRes, messagesRes, settingsRes] = await Promise.all([
         fetch("/api/properties"),
         fetch("/api/projects"),
+        fetch("/api/blog"),
         fetch("/api/requests"),
         fetch("/api/messages"),
         fetch("/api/settings"),
       ]);
 
-      const [properties, projects, requests, messages, settings] = await Promise.all([
+      const [properties, projects, blogs, requests, messages, settings] = await Promise.all([
         propsRes.json().then(d => Array.isArray(d) ? d : []),
         projectsRes.json().then(d => Array.isArray(d) ? d : []),
+        blogRes.json().then(d => Array.isArray(d) ? d : []),
         requestsRes.json().then(d => Array.isArray(d) ? d : []),
         messagesRes.json().then(d => Array.isArray(d) ? d : []),
         settingsRes.json(),
@@ -63,13 +80,14 @@ export default function AdminPage() {
       setData({ 
         properties, 
         projects, 
+        blogs,
         requests, 
         messages, 
         settings: (settings && !settings.error) ? settings : data.settings 
       });
     } catch (error) {
       toast.error("Error fetching data");
-      setData({ properties: [], projects: [], requests: [], messages: [] });
+      setData({ properties: [], projects: [], blogs: [], requests: [], messages: [], settings: data.settings });
     } finally {
       setLoading(false);
     }
@@ -211,6 +229,8 @@ export default function AdminPage() {
         setFormData({ title: "", price: "", city: "riyadh", location: "", type: "apartment", category: "sale", images: [], rooms: 3, area: 150, description: "وصف العقار هنا" });
       } else if (type === 'projects') {
         setFormData({ title: "", description: "", images: [] });
+      } else if (type === 'blogs') {
+        setFormData({ title: "", titleEn: "", description: "", descriptionEn: "", slug: "", image: "" });
       }
     }
     setShowModal(true);
@@ -251,6 +271,7 @@ export default function AdminPage() {
     { key: "sale-units", name: "وحدات للبيع", icon: "fa-building" },
     { key: "rent-units", name: "وحدات للإيجار", icon: "fa-key" },
     { key: "projects", name: "المشاريع", icon: "fa-project-diagram" },
+    { key: "articles", name: "المقالات", icon: "fa-newspaper" },
     { key: "leads", name: "الطلبات", icon: "fa-users" },
     { key: "messages", name: "الرسائل", icon: "fa-envelope" },
     { key: "settings", name: "الإعدادات", icon: "fa-cog" },
@@ -279,6 +300,13 @@ export default function AdminPage() {
           </div>
           <h3>إجمالي الطلبات</h3>
           <div className="value">{data.requests.length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="icon-box">
+            <i className="fas fa-newspaper"></i>
+          </div>
+          <h3>إجمالي المقالات</h3>
+          <div className="value">{data.blogs.length}</div>
         </div>
         <div className="stat-card">
           <div className="icon-box">
@@ -324,8 +352,8 @@ export default function AdminPage() {
   const renderTable = (type: string, columns: any[], items: any[]) => (
     <div className="admin-table-container">
       <div className="admin-table-header">
-        <h3>قائمة {type === 'properties' ? 'العقارات' : type === 'projects' ? 'المشاريع' : type === 'requests' ? 'الطلبات' : 'الرسائل'}</h3>
-        {(type === 'properties' || type === 'projects') && (
+        <h3>قائمة {type === 'properties' ? 'العقارات' : type === 'projects' ? 'المشاريع' : type === 'blogs' ? 'المقالات' : type === 'requests' ? 'الطلبات' : 'الرسائل'}</h3>
+        {(type === 'properties' || type === 'projects' || type === 'blogs') && (
           <button className="btn btn-primary" onClick={() => handleOpenModal(type)}>
             إضافة جديد +
           </button>
@@ -351,7 +379,7 @@ export default function AdminPage() {
                 </td>
               ))}
               <td>
-                {(type === 'properties' || type === 'projects') && (
+                {(type === 'properties' || type === 'projects' || type === 'blogs') && (
                   <button className="btn btn-outline btn-sm" onClick={() => handleOpenModal(type, item)} style={{ marginLeft: '5px' }}>
                     <i className="fas fa-edit"></i>
                   </button>
@@ -385,6 +413,7 @@ export default function AdminPage() {
         <button className={activeSettingsTab === 'contact' ? 'active' : ''} onClick={() => setActiveSettingsTab('contact')}>التواصل</button>
         <button className={activeSettingsTab === 'about' ? 'active' : ''} onClick={() => setActiveSettingsTab('about')}>عن الشركة</button>
         <button className={activeSettingsTab === 'services' ? 'active' : ''} onClick={() => setActiveSettingsTab('services')}>الخدمات (3 أقسام)</button>
+        <button className={activeSettingsTab === 'seo' ? 'active' : ''} onClick={() => setActiveSettingsTab('seo')}>السيو (SEO)</button>
         <button className={activeSettingsTab === 'security' ? 'active' : ''} onClick={() => setActiveSettingsTab('security')}>الأمان</button>
       </div>
 
@@ -646,6 +675,43 @@ export default function AdminPage() {
             ))}
           </div>
         )}
+
+        {activeSettingsTab === 'seo' && (
+          <div className="settings-section">
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>إعدادات السيو (SEO)</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>عنوان الموقع (عربي)</label>
+                <input type="text" className="form-control" value={data.settings.seo?.metaTitle || ""} onChange={e => updateSetting('seo', 'metaTitle', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>Site Title (English)</label>
+                <input type="text" className="form-control" value={data.settings.seo?.metaTitleEn || ""} onChange={e => updateSetting('seo', 'metaTitleEn', e.target.value)} />
+              </div>
+            </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>وصف الموقع (عربي)</label>
+                <textarea className="form-control" rows={3} value={data.settings.seo?.metaDescription || ""} onChange={e => updateSetting('seo', 'metaDescription', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>Site Description (English)</label>
+                <textarea className="form-control" rows={3} value={data.settings.seo?.metaDescriptionEn || ""} onChange={e => updateSetting('seo', 'metaDescriptionEn', e.target.value)} />
+              </div>
+            </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>الكلمات المفتاحية (عربي)</label>
+                <input type="text" className="form-control" value={data.settings.seo?.keywords || ""} onChange={e => updateSetting('seo', 'keywords', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>Keywords (English)</label>
+                <input type="text" className="form-control" value={data.settings.seo?.keywordsEn || ""} onChange={e => updateSetting('seo', 'keywordsEn', e.target.value)} />
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeSettingsTab === 'security' && (
           <div className="settings-section">
             <h3>تغيير كلمة المرور</h3>
@@ -711,6 +777,12 @@ export default function AdminPage() {
           { key: "title", name: "المشروع" },
           { key: "description", name: "الوصف" }
         ], data.projects);
+      case "articles":
+        return renderTable("blogs", [
+          { key: "image", name: "صورة" },
+          { key: "title", name: "العنوان" },
+          { key: "slug", name: "Slug" }
+        ], data.blogs);
       case "leads":
         return renderTable("requests", [
           { key: "name", name: "العميل" },
@@ -783,7 +855,47 @@ export default function AdminPage() {
             </div>
             <form onSubmit={handleFormSubmit}>
               <div className="modal-body">
-                {editingItem.type === 'properties' ? (
+                {editingItem.type === 'blogs' ? (
+                  <>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>العنوان (عربي)</label>
+                        <input type="text" className="form-control" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                      </div>
+                      <div className="form-group">
+                        <label>العنوان (English)</label>
+                        <input type="text" className="form-control" value={formData.titleEn} onChange={e => setFormData({...formData, titleEn: e.target.value})} required />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>الرابط (Slug) - بالإنجليزية فقط</label>
+                      <input type="text" className="form-control" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} required placeholder="example-article-slug" />
+                    </div>
+                    <div className="form-group">
+                      <label>الصورة البارزة</label>
+                      <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginTop: '10px' }}>
+                        {formData.image && <img src={formData.image} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }} />}
+                        <input type="file" onChange={async (e) => {
+                          const files = e.target.files;
+                          if (!files?.[0]) return;
+                          const fd = new FormData();
+                          fd.append("files", files[0]);
+                          const res = await fetch("/api/upload", { method: "POST", body: fd });
+                          const resData = await res.json();
+                          if (resData.urls?.[0]) setFormData({...formData, image: resData.urls[0]});
+                        }} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>المحتوى (عربي)</label>
+                      <textarea className="form-control" rows={10} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
+                    </div>
+                    <div className="form-group">
+                      <label>المحتوى (English)</label>
+                      <textarea className="form-control" rows={10} value={formData.descriptionEn} onChange={e => setFormData({...formData, descriptionEn: e.target.value})} required />
+                    </div>
+                  </>
+                ) : editingItem.type === 'properties' ? (
                   <>
                     <div className="form-group">
                       <label>العنوان</label>

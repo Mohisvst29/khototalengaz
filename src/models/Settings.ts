@@ -44,6 +44,14 @@ const SettingsSchema = new Schema(
         image: { type: String, default: "" },
       }
     ],
+    seo: {
+      metaTitle: { type: String, default: "خطوط الإنجاز للعقارات | أفضل عقارات للبيع والإيجار في الرياض" },
+      metaTitleEn: { type: String, default: "Khotot Al-Engaz Real Estate | Best Properties for Sale and Rent in Riyadh" },
+      metaDescription: { type: String, default: "شركة خطوط الإنجاز للعقارات تقدم أفضل الحلول العقارية في المملكة العربية السعودية." },
+      metaDescriptionEn: { type: String, default: "Khotot Al-Engaz Real Estate offers the best real estate solutions in Saudi Arabia." },
+      keywords: { type: String, default: "عقارات، الرياض، شقق للبيع، فيلات" },
+      keywordsEn: { type: String, default: "real estate, Riyadh, apartments for sale, villas" },
+    },
   },
   { timestamps: true }
 );
