@@ -100,6 +100,47 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
         </div>
       </section>
 
+      {/* Services Section (3 Sections) */}
+      {settings?.services?.some((s: any) => s.title || s.image) && (
+        <section className="section">
+          <div className="container">
+            <div className="section-header" data-aos="fade-up">
+              <h2>{locale === 'ar' ? 'خدماتنا المميزة' : 'Our Specialized Services'}</h2>
+              <p>{locale === 'ar' ? 'نقدم حلولاً عقارية متكاملة تلبي احتياجاتكم' : 'We provide integrated real estate solutions to meet your needs'}</p>
+            </div>
+            <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+              {settings.services.map((service: any, idx: number) => (
+                (service.title || service.titleEn) && (
+                  <div key={idx} className="service-card-new" data-aos="fade-up" data-aos-delay={idx * 100} style={{ 
+                    background: 'var(--white)', 
+                    borderRadius: '15px', 
+                    overflow: 'hidden', 
+                    boxShadow: 'var(--shadow-md)',
+                    transition: 'transform 0.3s ease'
+                  }}>
+                    <div style={{ height: '200px', overflow: 'hidden' }}>
+                      <img 
+                        src={service.image || `https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80`} 
+                        alt={locale === 'ar' ? service.title : service.titleEn} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                    <div style={{ padding: '25px', textAlign: 'center' }}>
+                      <h3 style={{ color: 'var(--primary)', marginBottom: '15px', fontSize: '22px' }}>
+                        {locale === 'ar' ? service.title : service.titleEn}
+                      </h3>
+                      <p style={{ color: 'var(--text-light)', lineHeight: '1.6' }}>
+                        {locale === 'ar' ? service.description : service.descriptionEn}
+                      </p>
+                    </div>
+                  </div>
+                )
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Features Section */}
       <section className="section" style={{ background: "var(--secondary)" }}>
         <div className="container">

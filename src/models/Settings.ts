@@ -35,6 +35,15 @@ const SettingsSchema = new Schema(
       contentEn: { type: String, default: "A leading company in real estate development..." },
       images: [{ type: String }],
     },
+    services: [
+      {
+        title: { type: String, default: "" },
+        titleEn: { type: String, default: "" },
+        description: { type: String, default: "" },
+        descriptionEn: { type: String, default: "" },
+        image: { type: String, default: "" },
+      }
+    ],
   },
   { timestamps: true }
 );

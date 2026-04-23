@@ -27,7 +27,12 @@ export default function AdminPage() {
         enabled: true 
       },
       contact: { phone1: "", phone2: "", whatsapp: "", email: "", address: "", addressEn: "", mapLink: "" },
-      about: { content: "", contentEn: "", images: [] }
+      about: { content: "", contentEn: "", images: [] },
+      services: [
+        { title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { title: "", titleEn: "", description: "", descriptionEn: "", image: "" }
+      ]
     },
   });
   const [activeSettingsTab, setActiveSettingsTab] = useState("branding");
@@ -379,6 +384,7 @@ export default function AdminPage() {
         <button className={activeSettingsTab === 'announcement' ? 'active' : ''} onClick={() => setActiveSettingsTab('announcement')}>الشريط الإعلاني</button>
         <button className={activeSettingsTab === 'contact' ? 'active' : ''} onClick={() => setActiveSettingsTab('contact')}>التواصل</button>
         <button className={activeSettingsTab === 'about' ? 'active' : ''} onClick={() => setActiveSettingsTab('about')}>عن الشركة</button>
+        <button className={activeSettingsTab === 'services' ? 'active' : ''} onClick={() => setActiveSettingsTab('services')}>الخدمات (3 أقسام)</button>
         <button className={activeSettingsTab === 'security' ? 'active' : ''} onClick={() => setActiveSettingsTab('security')}>الأمان</button>
       </div>
 
@@ -442,11 +448,21 @@ export default function AdminPage() {
                 <input type="file" onChange={async (e) => {
                   const files = e.target.files;
                   if (!files?.[0]) return;
+                  const file = files[0];
+                  const isVideo = file.type.startsWith('video/') || 
+                                  file.name.toLowerCase().endsWith('.mp4') || 
+                                  file.name.toLowerCase().endsWith('.webm') || 
+                                  file.name.toLowerCase().endsWith('.mov');
+                  
                   const fd = new FormData();
-                  fd.append("files", files[0]);
+                  fd.append("files", file);
                   const res = await fetch("/api/upload", { method: "POST", body: fd });
                   const resData = await res.json();
-                  if (resData.urls?.[0]) updateSetting('hero', 'media', resData.urls[0]);
+                  if (resData.urls?.[0]) {
+                    updateSetting('hero', 'media', resData.urls[0]);
+                    updateSetting('hero', 'mediaType', isVideo ? 'video' : 'image');
+                    toast.success(isVideo ? "تم رفع الفيديو بنجاح" : "تم رفع الصورة بنجاح");
+                  }
                 }} />
               </div>
             </div>
@@ -555,7 +571,81 @@ export default function AdminPage() {
           </div>
         )}
 
-        {activeSettingsTab === 'security' && (
+        {activeSettingsTab === 'services' && (
+          <div className="settings-section">
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>إدارة الأقسام الثلاثة الرئيسية</h3>
+            {[0, 1, 2].map((index) => (
+              <div key={index} className="service-edit-box" style={{ padding: '20px', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '20px', background: '#f8fafc' }}>
+                <h4 style={{ marginBottom: '15px' }}>القسم {index + 1}</h4>
+                <div className="form-group">
+                  <label>صورة القسم</label>
+                  <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginTop: '10px' }}>
+                    {data.settings.services?.[index]?.image && (
+                      <img src={data.settings.services[index].image} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }} />
+                    )}
+                    <input type="file" onChange={async (e) => {
+                      const files = e.target.files;
+                      if (!files?.[0]) return;
+                      const fd = new FormData();
+                      fd.append("files", files[0]);
+                      const res = await fetch("/api/upload", { method: "POST", body: fd });
+                      const resData = await res.json();
+                      if (resData.urls?.[0]) {
+                        const newServices = [...(data.settings.services || [])];
+                        if (!newServices[index]) newServices[index] = {};
+                        newServices[index].image = resData.urls[0];
+                        setData((prev: any) => ({
+                          ...prev,
+                          settings: { ...prev.settings, services: newServices }
+                        }));
+                      }
+                    }} />
+                  </div>
+                </div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>العنوان (عربي)</label>
+                    <input type="text" className="form-control" value={data.settings.services?.[index]?.title || ""} onChange={e => {
+                      const newServices = [...(data.settings.services || [])];
+                      if (!newServices[index]) newServices[index] = {};
+                      newServices[index].title = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, services: newServices } }));
+                    }} />
+                  </div>
+                  <div className="form-group">
+                    <label>العنوان (English)</label>
+                    <input type="text" className="form-control" value={data.settings.services?.[index]?.titleEn || ""} onChange={e => {
+                      const newServices = [...(data.settings.services || [])];
+                      if (!newServices[index]) newServices[index] = {};
+                      newServices[index].titleEn = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, services: newServices } }));
+                    }} />
+                  </div>
+                </div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>الوصف (عربي)</label>
+                    <textarea className="form-control" rows={2} value={data.settings.services?.[index]?.description || ""} onChange={e => {
+                      const newServices = [...(data.settings.services || [])];
+                      if (!newServices[index]) newServices[index] = {};
+                      newServices[index].description = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, services: newServices } }));
+                    }} />
+                  </div>
+                  <div className="form-group">
+                    <label>الوصف (English)</label>
+                    <textarea className="form-control" rows={2} value={data.settings.services?.[index]?.descriptionEn || ""} onChange={e => {
+                      const newServices = [...(data.settings.services || [])];
+                      if (!newServices[index]) newServices[index] = {};
+                      newServices[index].descriptionEn = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, services: newServices } }));
+                    }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
           <div className="settings-section">
             <h3>تغيير كلمة المرور</h3>
             <div className="form-group" style={{ marginTop: '20px' }}>
