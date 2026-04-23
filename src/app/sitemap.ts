@@ -3,6 +3,8 @@ import connectToDatabase from "@/lib/mongodb";
 import Blog from "@/models/Blog";
 import Property from "@/models/Property";
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://khototalengaz.com";
   const locales = ["ar", "en"];
