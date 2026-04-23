@@ -60,17 +60,16 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
               style={{ objectFit: "cover", width: "100%", height: "100%" }}
             />
           ) : (
-            <div 
-              className="hero-media-item active"
-              style={{ 
-                backgroundImage: `url('${hero.media}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                width: '100%',
-                height: '100%',
-                opacity: 1
-              }}
-            />
+            <div className="hero-media-item active">
+              <Image 
+                src={hero.media} 
+                alt={locale === 'ar' ? hero.title : hero.titleEn}
+                fill
+                priority
+                style={{ objectFit: "cover" }}
+                sizes="100vw"
+              />
+            </div>
           )}
         </div>
         <div className="hero-overlay"></div>

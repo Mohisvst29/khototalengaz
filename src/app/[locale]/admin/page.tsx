@@ -646,6 +646,7 @@ export default function AdminPage() {
             ))}
           </div>
         )}
+        {activeSettingsTab === 'security' && (
           <div className="settings-section">
             <h3>تغيير كلمة المرور</h3>
             <div className="form-group" style={{ marginTop: '20px' }}>

@@ -115,8 +115,11 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="footer-bottom">
+        <div className="footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <p>{t.footer.rights}</p>
+          <a href="https://wa.me/966541430116" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', fontSize: '14px', opacity: 0.8 }}>
+            {locale === 'ar' ? 'صمم بواسطة رواد الرقمية' : 'Designed by Rowad Digital'}
+          </a>
         </div>
       </div>
     </footer>
