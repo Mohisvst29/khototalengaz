@@ -1,0 +1,262 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import LeadModal from "./LeadModal";
+import Counter from "./Counter";
+import { useParams } from "next/navigation";
+import { getTranslation } from "@/lib/i18n";
+
+export default function HomeClient({ initialProperties, initialBlogs }: any) {
+  const [featuredProperties, setFeaturedProperties] = useState(initialProperties);
+  const [latestBlogs, setLatestBlogs] = useState(initialBlogs);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const params = useParams();
+  const locale = (params?.locale as string) || "ar";
+  const t = getTranslation(locale);
+
+  useEffect(() => {
+    // Re-fetch in client if needed or just use initial data
+    if (initialProperties.length === 0) {
+      fetch("/api/properties")
+        .then((res) => res.json())
+        .then((data) => setFeaturedProperties(data.slice(0, 3)))
+        .catch(() => setFeaturedProperties([]));
+    }
+
+    if (initialBlogs.length === 0) {
+      fetch("/api/blog")
+        .then((res) => res.json())
+        .then((data) => setLatestBlogs(data.slice(0, 3)))
+        .catch(() => setLatestBlogs([]));
+    }
+  }, [initialProperties.length, initialBlogs.length]);
+
+  return (
+    <div className="page active" id="page-home">
+      <LeadModal isOpen={isLeadModalOpen} onClose={() => setIsLeadModalOpen(false)} />
+      
+      {/* Hero Section */}
+      <section className="hero">
+        <div id="heroMediaContainer" className="hero-media-container">
+          <Image
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
+            alt={t.hero.title}
+            fill
+            priority
+            className="hero-media-item active"
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <div
+            className="hero-text"
+            data-aos={locale === "ar" ? "fade-left" : "fade-right"}
+            data-aos-duration="1000"
+          >
+            <h1>{t.hero.title}</h1>
+            <p>{t.hero.subtitle}</p>
+            <div className="hero-buttons">
+              <Link href={`/${locale}/sale`} className="btn btn-accent">
+                <i className="fas fa-building"></i>
+                <span>{t.hero.view_units}</span>
+              </Link>
+              <button className="btn btn-primary" onClick={() => setIsLeadModalOpen(true)}>
+                <i className="fas fa-paper-plane"></i>
+                <span>{t.hero.send_request}</span>
+              </button>
+              <Link href={`/${locale}/contact`} className="btn btn-outline-white">
+                <i className="fas fa-phone"></i>
+                <span>{t.hero.contact_us}</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="section" style={{ background: "var(--secondary)" }}>
+        <div className="container">
+          <div className="section-header" data-aos="fade-up">
+            <h2>{t.home.why_choose_us}</h2>
+            <p>{t.home.why_subtitle}</p>
+          </div>
+          <div className="features-grid">
+            <div className="feature-card" data-aos="fade-up" data-aos-delay="100">
+              <div className="feature-icon">
+                <i className="fas fa-chart-line"></i>
+              </div>
+              <h3>{t.features.experience}</h3>
+              <p>{t.features.experience_desc}</p>
+            </div>
+            <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
+              <div className="feature-icon">
+                <i className="fas fa-shield-alt"></i>
+              </div>
+              <h3>{t.features.trust}</h3>
+              <p>{t.features.trust_desc}</p>
+            </div>
+            <div className="feature-card" data-aos="fade-up" data-aos-delay="300">
+              <div className="feature-icon">
+                <i className="fas fa-th-large"></i>
+              </div>
+              <h3>{t.features.variety}</h3>
+              <p>{t.features.variety_desc}</p>
+            </div>
+            <div className="feature-card" data-aos="fade-up" data-aos-delay="400">
+              <div className="feature-icon">
+                <i className="fas fa-headset"></i>
+              </div>
+              <h3>{t.features.support}</h3>
+              <p>{t.features.support_desc}</p>
+            </div>
+            <div className="feature-card" data-aos="fade-up" data-aos-delay="500">
+              <div className="feature-icon">
+                <i className="fas fa-bolt"></i>
+              </div>
+              <h3>{t.features.speed}</h3>
+              <p>{t.features.speed_desc}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Properties Section */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header" data-aos="fade-up">
+            <h2>{t.home.latest_units}</h2>
+            <p>{t.home.latest_units_subtitle}</p>
+          </div>
+          <div
+            className="properties-grid"
+            id="featuredProperties"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            {featuredProperties.map((p: any) => (
+              <div key={p._id} className="property-card">
+                <div className="property-image">
+                  <img src={p.image} alt={p.title} loading="lazy" />
+                  <span className={`property-badge ${p.category === 'rent' ? 'rent' : ''}`}>
+                    {p.category === 'sale' ? t.property.sale : t.property.rent}
+                  </span>
+                </div>
+                <div className="property-content">
+                  <div className="property-price">
+                    {p.price.toLocaleString()} {t.property.sar}
+                  </div>
+                  <h3 className="property-title">{p.title}</h3>
+                  <div className="property-location">
+                    <i className="fas fa-map-marker-alt"></i>
+                    {p.location}
+                  </div>
+                  <div className="property-meta">
+                    <span>
+                      <i className="fas fa-bed"></i> {p.rooms} {t.property.rooms}
+                    </span>
+                    <span>
+                      <i className="fas fa-ruler-combined"></i> {p.area} {t.property.area}
+                    </span>
+                    <span>
+                      <i className="fas fa-home"></i> {t.property[p.type] || p.type}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link href={`/${locale}/sale`} className="btn btn-outline">
+              <span>{t.home.view_all_units}</span>
+              <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section stats-section">
+        <div className="container">
+          <div className="stats-row">
+            <div className="stat-item" data-aos="zoom-in" data-aos-delay="100">
+              <Counter target={250} />
+              <div className="stat-label">
+                {t.stats.sold}
+              </div>
+            </div>
+            <div className="stat-item" data-aos="zoom-in" data-aos-delay="200">
+              <Counter target={500} />
+              <div className="stat-label">
+                {t.stats.clients}
+              </div>
+            </div>
+            <div className="stat-item" data-aos="zoom-in" data-aos-delay="300">
+              <Counter target={15} />
+              <div className="stat-label">
+                {t.stats.projects}
+              </div>
+            </div>
+            <div className="stat-item" data-aos="zoom-in" data-aos-delay="400">
+              <Counter target={10} />
+              <div className="stat-label">
+                {t.stats.years}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Blog Section */}
+      <section className="section" style={{ background: "var(--secondary)" }}>
+        <div className="container">
+          <div className="section-header" data-aos="fade-up">
+            <h2>{t.home.latest_blog}</h2>
+            <p>{t.home.blog_subtitle}</p>
+          </div>
+          <div className="properties-grid">
+            {latestBlogs.map((post: any) => (
+              <Link
+                key={post._id}
+                href={`/${locale}/blog/${post.slug}`}
+                className="property-card"
+                data-aos="fade-up"
+              >
+                <div className="property-image">
+                  <img src={post.image} alt={post.title} loading="lazy" />
+                  <span className="property-badge">{locale === 'ar' ? 'مقال' : 'Article'}</span>
+                </div>
+                <div className="property-content">
+                  <div className="property-price" style={{ fontSize: "14px" }}>
+                    {new Date(post.createdAt).toLocaleDateString(locale === 'ar' ? "ar-SA" : "en-US")}
+                  </div>
+                  <h3 className="property-title">{post.title}</h3>
+                  <p
+                    style={{
+                      color: "var(--text-light)",
+                      fontSize: "14px",
+                      marginTop: "10px",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "2",
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {post.content}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link href={`/${locale}/blog`} className="btn btn-outline">
+              <span>{t.home.view_all_posts}</span>
+              <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -9,9 +9,28 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/toastify-js": "^1.12.4",
+    "aos": "^2.3.4",
+    "axios": "^1.15.2",
+    "bcryptjs": "^3.0.3",
+    "clsx": "^2.1.1",
+    "cookie": "^1.1.1",
+    "framer-motion": "^12.38.0",
+    "jose": "^6.2.2",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.8.0",
+    "mongoose": "^9.5.0",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.73.1",
+    "react-toastify": "^11.1.0",
+    "tailwind-merge": "^3.5.0",
+    "toastify-js": "^1.12.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "sale": "For Sale",
+    "rent": "For Rent",
+    "projects": "Projects",
+    "blog": "Blog",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "title": "Developing Real Estate with Modern Standards",
+    "subtitle": "We provide residential and commercial units for sale and rent in the best locations across the Kingdom.",
+    "view_units": "View Units",
+    "send_request": "Send Request",
+    "contact_us": "Contact Us"
+  },
+  "footer": {
+    "desc": "Khotot Al-Engaz Real Estate offers the best real estate solutions in Saudi Arabia. We are committed to credibility and quality in all our dealings.",
+    "quick_links": "Quick Links",
+    "contact_info": "Contact Info",
+    "rights": "All rights reserved © 2026 Khotot Al-Engaz Real Estate"
+  },
+  "home": {
+    "why_choose_us": "Why Choose Khotot Al-Engaz?",
+    "why_subtitle": "We provide integrated real estate solutions combining experience and credibility",
+    "latest_units": "Latest Available Units",
+    "latest_units_subtitle": "Browse our selected collection of the best properties in the Kingdom",
+    "view_all_units": "View All Units",
+    "latest_blog": "Latest Articles",
+    "blog_subtitle": "Follow the latest news and real estate tips",
+    "view_all_posts": "View All Articles"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn about Khotot Al-Engaz Real Estate Development",
+    "company": "Khotot Al-Engaz Real Estate Development",
+    "desc1": "We provide integrated real estate solutions including sales, leasing, and management of residential and commercial units. We rely on deep experience in the Saudi real estate market and an understanding of customer needs to offer the best options combining quality, location, and competitive pricing.",
+    "desc2": "We aim to facilitate the search for the right property through professional services and a comfortable user experience."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are here to help you find your perfect property",
+    "info_title": "Contact Information",
+    "form_title": "Send Us a Message",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send Message"
+  },
+  "features": {
+    "experience": "Saudi Market Experience",
+    "experience_desc": "We have deep experience in the Saudi real estate market and a full understanding of client needs",
+    "trust": "Commitment to Credibility",
+    "trust_desc": "We adhere to the highest standards of transparency and credibility in all our dealings",
+    "variety": "Variety of Options",
+    "variety_desc": "We provide a wide range of residential and commercial units to suit all needs",
+    "support": "Full Customer Support",
+    "support_desc": "A specialized team is ready to assist you every step of the way in choosing the right property",
+    "speed": "Speed in Execution",
+    "speed_desc": "We ensure all transactions are completed quickly and efficiently"
+  },
+  "stats": {
+    "sold": "Units Sold",
+    "clients": "Happy Clients",
+    "projects": "Completed Projects",
+    "years": "Years of Experience"
+  },
+  "property": {
+    "sale": "For Sale",
+    "rent": "For Rent",
+    "apartment": "Apartment",
+    "villa": "Villa",
+    "floor": "Floor",
+    "office": "Office",
+    "rooms": "Rooms",
+    "area": "m²",
+    "location": "Location",
+    "price": "Price",
+    "sar": "SAR"
+  },
+  "lead": {
+    "title": "Send Your Real Estate Request",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "city": "City",
+    "property_type": "Property Type",
+    "listing_type": "Offer Type",
+    "budget": "Approximate Budget",
+    "submit": "Confirm Request",
+    "loading": "Sending...",
+    "success": "Request sent successfully! We will contact you soon.",
+    "error": "Error occurred while sending the request.",
+    "riyadh": "Riyadh",
+    "jeddah": "Jeddah",
+    "dammam": "Dammam",
+    "khobar": "Khobar"
+  }
+}
