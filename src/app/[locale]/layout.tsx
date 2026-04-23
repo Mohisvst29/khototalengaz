@@ -15,9 +15,29 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-export const metadata: Metadata = {
-  title: "خطوط الإنجاز",
-};
+import dbConnect from "@/lib/mongodb";
+import Settings from "@/models/Settings";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  
+  await dbConnect();
+  const settings = await Settings.findOne({});
+
+  const seo = settings?.seo || {};
+  const branding = settings?.branding || { logo: "/favicon.ico" };
+  
+  return {
+    title: locale === 'ar' ? (seo.metaTitle || "خطوط الإنجاز") : (seo.metaTitleEn || "Khotot Al-Engaz"),
+    description: locale === 'ar' ? seo.metaDescription : seo.metaDescriptionEn,
+    keywords: locale === 'ar' ? seo.keywords : seo.keywordsEn,
+    icons: {
+      icon: branding.logo || "/favicon.ico",
+      shortcut: branding.logo || "/favicon.ico",
+      apple: branding.logo || "/favicon.ico",
+    }
+  };
+}
 
 export default async function RootLayout({
   children,

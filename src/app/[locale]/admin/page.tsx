@@ -47,6 +47,9 @@ export default function AdminPage() {
         metaTitle: "", metaTitleEn: "",
         metaDescription: "", metaDescriptionEn: "",
         keywords: "", keywordsEn: ""
+      },
+      social: {
+        twitter: "", instagram: "", linkedin: "", snapchat: "", tiktok: "", facebook: ""
       }
     },
   });
@@ -414,6 +417,7 @@ export default function AdminPage() {
         <button className={activeSettingsTab === 'about' ? 'active' : ''} onClick={() => setActiveSettingsTab('about')}>عن الشركة</button>
         <button className={activeSettingsTab === 'services' ? 'active' : ''} onClick={() => setActiveSettingsTab('services')}>الخدمات (3 أقسام)</button>
         <button className={activeSettingsTab === 'seo' ? 'active' : ''} onClick={() => setActiveSettingsTab('seo')}>السيو (SEO)</button>
+        <button className={activeSettingsTab === 'social' ? 'active' : ''} onClick={() => setActiveSettingsTab('social')}>التواصل الاجتماعي</button>
         <button className={activeSettingsTab === 'security' ? 'active' : ''} onClick={() => setActiveSettingsTab('security')}>الأمان</button>
       </div>
 
@@ -707,6 +711,42 @@ export default function AdminPage() {
               <div className="form-group">
                 <label>Keywords (English)</label>
                 <input type="text" className="form-control" value={data.settings.seo?.keywordsEn || ""} onChange={e => updateSetting('seo', 'keywordsEn', e.target.value)} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSettingsTab === 'social' && (
+          <div className="settings-section">
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>روابط التواصل الاجتماعي</h3>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>تويتر (Twitter)</label>
+                <input type="text" className="form-control" value={data.settings.social?.twitter || ""} onChange={e => updateSetting('social', 'twitter', e.target.value)} placeholder="https://twitter.com/..." />
+              </div>
+              <div className="form-group">
+                <label>إنستجرام (Instagram)</label>
+                <input type="text" className="form-control" value={data.settings.social?.instagram || ""} onChange={e => updateSetting('social', 'instagram', e.target.value)} placeholder="https://instagram.com/..." />
+              </div>
+            </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>لينكد إن (LinkedIn)</label>
+                <input type="text" className="form-control" value={data.settings.social?.linkedin || ""} onChange={e => updateSetting('social', 'linkedin', e.target.value)} placeholder="https://linkedin.com/..." />
+              </div>
+              <div className="form-group">
+                <label>فيسبوك (Facebook)</label>
+                <input type="text" className="form-control" value={data.settings.social?.facebook || ""} onChange={e => updateSetting('social', 'facebook', e.target.value)} placeholder="https://facebook.com/..." />
+              </div>
+            </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>سناب شات (Snapchat)</label>
+                <input type="text" className="form-control" value={data.settings.social?.snapchat || ""} onChange={e => updateSetting('social', 'snapchat', e.target.value)} placeholder="https://snapchat.com/..." />
+              </div>
+              <div className="form-group">
+                <label>تيك توك (TikTok)</label>
+                <input type="text" className="form-control" value={data.settings.social?.tiktok || ""} onChange={e => updateSetting('social', 'tiktok', e.target.value)} placeholder="https://tiktok.com/@..." />
               </div>
             </div>
           </div>

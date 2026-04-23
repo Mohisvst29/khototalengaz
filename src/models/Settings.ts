@@ -52,6 +52,14 @@ const SettingsSchema = new Schema(
       keywords: { type: String, default: "عقارات، الرياض، شقق للبيع، فيلات" },
       keywordsEn: { type: String, default: "real estate, Riyadh, apartments for sale, villas" },
     },
+    social: {
+      twitter: { type: String, default: "" },
+      instagram: { type: String, default: "" },
+      linkedin: { type: String, default: "" },
+      snapchat: { type: String, default: "" },
+      tiktok: { type: String, default: "" },
+      facebook: { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

@@ -26,6 +26,7 @@ const Footer = () => {
     addressEn: "Riyadh, Saudi Arabia",
     whatsapp: "966567337666"
   };
+  const social = settings?.social || {};
 
   return (
     <footer className="footer" id="mainFooter">
@@ -49,16 +50,37 @@ const Footer = () => {
             </Link>
             <p data-key="footer_desc">{t.footer.desc}</p>
             <div className="footer-social">
-              <a href="#">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a href="#">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-              <a href={`https://wa.me/${contact.whatsapp}`}>
+              {social.twitter && (
+                <a href={social.twitter} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-twitter"></i>
+                </a>
+              )}
+              {social.instagram && (
+                <a href={social.instagram} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-instagram"></i>
+                </a>
+              )}
+              {social.linkedin && (
+                <a href={social.linkedin} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-linkedin-in"></i>
+                </a>
+              )}
+              {social.facebook && (
+                <a href={social.facebook} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+              )}
+              {social.snapchat && (
+                <a href={social.snapchat} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-snapchat-ghost"></i>
+                </a>
+              )}
+              {social.tiktok && (
+                <a href={social.tiktok} target="_blank" rel="noopener noreferrer">
+                  <i className="fab fa-tiktok"></i>
+                </a>
+              )}
+              <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
                 <i className="fab fa-whatsapp"></i>
               </a>
             </div>
