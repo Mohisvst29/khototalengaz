@@ -35,6 +35,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       icon: branding.logo || "/favicon.ico",
       shortcut: branding.logo || "/favicon.ico",
       apple: branding.logo || "/favicon.ico",
+    },
+    verification: {
+      google: "JT5ViAqhB9Q820_kMRUah7ziTi0XtzmyaMVjP3KJx9Q",
     }
   };
 }
