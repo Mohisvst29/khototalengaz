@@ -13,14 +13,22 @@ export default function ClientLayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAdmin = pathname.includes("/admin");
+
+  const isAdmin =
+    pathname.startsWith("/ar/admin") ||
+    pathname.startsWith("/en/admin");
 
   return (
     <>
       <AOSInit />
+
       {!isAdmin && <AnnouncementBar />}
       {!isAdmin && <Header />}
-      <main id={isAdmin ? "" : "mainContent"}>{children}</main>
+
+      <main id={isAdmin ? "" : "mainContent"}>
+        {children}
+      </main>
+
       {!isAdmin && <Footer />}
       {!isAdmin && <FloatingWhatsApp />}
     </>
