@@ -5,6 +5,48 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 
+// ✅ Types (المهم)
+type SettingsType = {
+  branding: { logo: string; logoSize: number };
+  hero: {
+    title: string;
+    titleEn: string;
+    subtitle: string;
+    subtitleEn: string;
+    media: string;
+    mediaType: string;
+  };
+  announcement: {
+    text: string;
+    textEn: string;
+    color: string;
+    speed: number;
+    enabled: boolean;
+  };
+  contact: {
+    phone1: string;
+    phone2: string;
+    whatsapp: string;
+    email: string;
+    address: string;
+    addressEn: string;
+    mapLink: string;
+  };
+  about: {
+    content: string;
+    contentEn: string;
+    images: string[];
+  };
+};
+
+type DashboardData = {
+  properties: any[];
+  projects: any[];
+  requests: any[];
+  messages: any[];
+  settings: SettingsType;
+};
+
 export default function AdminPage() {
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
@@ -12,8 +54,8 @@ export default function AdminPage() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 💣 الحل هنا
-  const [data, setData] = useState<any>({
+  // ✅ الحل الحقيقي هنا
+  const [data, setData] = useState<DashboardData>({
     properties: [],
     projects: [],
     requests: [],
@@ -45,11 +87,14 @@ export default function AdminPage() {
         addressEn: "",
         mapLink: "",
       },
-      about: { content: "", contentEn: "", images: [] },
+      about: {
+        content: "",
+        contentEn: "",
+        images: [],
+      },
     },
   });
 
-  const [activeSettingsTab, setActiveSettingsTab] = useState("branding");
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -73,22 +118,17 @@ export default function AdminPage() {
           settingsRes.json(),
         ]);
 
-      setData({
+      setData((prev) => ({
+        ...prev,
         properties,
         projects,
         requests,
         messages,
-        settings: settings && !settings.error ? settings : data.settings,
-      });
+        settings:
+          settings && !settings.error ? settings : prev.settings,
+      }));
     } catch (error) {
       toast.error("Error fetching data");
-      setData({
-        properties: [],
-        projects: [],
-        requests: [],
-        messages: [],
-        settings: data.settings,
-      });
     } finally {
       setLoading(false);
     }
@@ -101,6 +141,7 @@ export default function AdminPage() {
   return (
     <div style={{ padding: "40px", textAlign: "center" }}>
       <h1>Admin Dashboard</h1>
+
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -111,7 +152,9 @@ export default function AdminPage() {
           <p>Messages: {data.messages.length}</p>
 
           <Link href={`/${locale}`}>
-            <button style={{ marginTop: "20px" }}>Go to Website</button>
+            <button style={{ marginTop: "20px" }}>
+              Go to Website
+            </button>
           </Link>
         </>
       )}
