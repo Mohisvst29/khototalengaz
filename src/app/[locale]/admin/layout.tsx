@@ -14,7 +14,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = "ar"; // مؤقت
+  const locale = "ar";
 
   const navItems = [
     {
@@ -41,9 +41,10 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[#f3f4f6] flex flex-row-reverse" dir="rtl">
+
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-[260px] bg-[#0f2339] text-white fixed right-0 h-full z-30">
-        <div className="p-6 border-b border-white/5 flex justify-center">
+      <aside className="flex flex-col w-[260px] bg-[#0f2339] text-white fixed right-0 h-full z-30">
+        <div className="p-6 border-b border-white/10 flex justify-center">
           <Image
             src="/logo.png"
             alt="Admin"
@@ -58,7 +59,7 @@ export default function AdminLayout({
             <Link
               key={item.path}
               href={item.path}
-              className="flex items-center gap-3 px-6 py-4 text-gray-300 hover:bg-white/5 hover:text-white"
+              className="flex items-center gap-3 px-6 py-4 text-gray-300 hover:bg-white/10 hover:text-white transition"
             >
               {item.icon}
               <span className="font-bold text-[14px]">
@@ -68,7 +69,7 @@ export default function AdminLayout({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/5">
+        <div className="p-4 border-t border-white/10">
           <Link
             href="/ar"
             className="flex items-center gap-3 px-6 py-4 text-gray-300 hover:text-white"
@@ -80,14 +81,20 @@ export default function AdminLayout({
       </aside>
 
       {/* Main */}
-      <main className="flex-1 lg:pr-[260px] min-h-screen">
+      <main className="flex-1 mr-[260px] min-h-screen">
+
+        {/* Header */}
         <header className="bg-white border-b border-gray-200 h-[64px] flex items-center justify-between px-8 sticky top-0 z-20">
           <h1 className="text-[18px] font-bold text-[#0f2339]">
             لوحة التحكم
           </h1>
         </header>
 
-        <div className="p-8">{children}</div>
+        {/* Content */}
+        <div className="p-8">
+          {children}
+        </div>
+
       </main>
     </div>
   );
