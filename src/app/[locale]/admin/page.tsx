@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 
 /* ================= TYPES ================= */
 
@@ -43,7 +42,6 @@ export default function AdminPage() {
         fetch("/api/messages"),
       ]);
 
-      // لو أي API وقع
       responses.forEach((res) => {
         if (!res.ok) throw new Error("API Error");
       });
@@ -56,7 +54,6 @@ export default function AdminPage() {
         requests: Array.isArray(json[2]) ? json[2] : [],
         messages: Array.isArray(json[3]) ? json[3] : [],
       });
-
     } catch (err) {
       console.error(err);
       setError("فشل تحميل البيانات (راجع API أو الداتابيز)");
@@ -72,45 +69,27 @@ export default function AdminPage() {
   /* ================= UI ================= */
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div>
 
-      {/* Sidebar */}
-      <aside className="w-64 bg-blue-900 text-white p-6 space-y-6">
-        <h2 className="text-2xl font-bold">لوحة التحكم</h2>
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
 
-        <nav className="space-y-3">
-          <Link href={`/${locale}/admin`} className="block hover:text-yellow-300">الرئيسية</Link>
-          <Link href={`/${locale}/admin/properties`} className="block hover:text-yellow-300">العقارات</Link>
-          <Link href={`/${locale}/admin/projects`} className="block hover:text-yellow-300">المشاريع</Link>
-          <Link href={`/${locale}/admin/requests`} className="block hover:text-yellow-300">الطلبات</Link>
-          <Link href={`/${locale}/admin/messages`} className="block hover:text-yellow-300">الرسائل</Link>
-          <Link href={`/${locale}`} className="block text-yellow-400 mt-4">العودة للموقع</Link>
-        </nav>
-      </aside>
+      {loading && <p>Loading...</p>}
 
-      {/* Main */}
-      <main className="flex-1 p-10">
+      {error && (
+        <p className="text-red-500 font-semibold">{error}</p>
+      )}
 
-        <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        {loading && <p>Loading...</p>}
+          <Card title="العقارات" value={data.properties.length} color="bg-blue-500" />
+          <Card title="المشاريع" value={data.projects.length} color="bg-green-500" />
+          <Card title="الطلبات" value={data.requests.length} color="bg-yellow-500" />
+          <Card title="الرسائل" value={data.messages.length} color="bg-red-500" />
 
-        {error && (
-          <p className="text-red-500 font-semibold">{error}</p>
-        )}
+        </div>
+      )}
 
-        {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            <Card title="العقارات" value={data.properties.length} color="bg-blue-500" />
-            <Card title="المشاريع" value={data.projects.length} color="bg-green-500" />
-            <Card title="الطلبات" value={data.requests.length} color="bg-yellow-500" />
-            <Card title="الرسائل" value={data.messages.length} color="bg-red-500" />
-
-          </div>
-        )}
-
-      </main>
     </div>
   );
 }
