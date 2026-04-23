@@ -30,7 +30,7 @@ export default function AdminPage() {
       branding: { logo: "/logo.png", logoSize: 50 },
       hero: { 
         title: "", titleEn: "", subtitle: "", subtitleEn: "", 
-        slides: [{ url: "", type: "image" }],
+        slides: [{ url: "", type: "image", title: "", titleEn: "", subtitle: "", subtitleEn: "" }],
         media: "", mediaType: "image" 
       },
       announcement: { 
@@ -477,7 +477,7 @@ export default function AdminPage() {
                 <h4 style={{ margin: 0, color: 'var(--primary)', fontSize: '16px' }}>صور وفيديوهات الرئيسية (Slide Show)</h4>
                 <button type="button" className="btn btn-sm btn-outline" onClick={() => {
                   const newSlides = [...(data.settings.hero.slides || [])];
-                  newSlides.push({ url: "", type: "image" });
+                  newSlides.push({ url: "", type: "image", title: "", titleEn: "", subtitle: "", subtitleEn: "" });
                   updateSetting('hero', 'slides', newSlides);
                 }}>إضافة شريحة +</button>
               </div>
@@ -534,6 +534,42 @@ export default function AdminPage() {
                             }
                           }} />
                         </div>
+                      </div>
+                    </div>
+                    <div className="form-grid" style={{ marginTop: '10px' }}>
+                      <div className="form-group">
+                        <label>عنوان الشريحة (AR)</label>
+                        <input type="text" className="form-control" value={slide.title || ""} onChange={e => {
+                          const newSlides = [...data.settings.hero.slides];
+                          newSlides[index].title = e.target.value;
+                          updateSetting('hero', 'slides', newSlides);
+                        }} placeholder="اترك فارغاً لاستخدام العنوان الرئيسي" />
+                      </div>
+                      <div className="form-group">
+                        <label>عنوان الشريحة (EN)</label>
+                        <input type="text" className="form-control" value={slide.titleEn || ""} onChange={e => {
+                          const newSlides = [...data.settings.hero.slides];
+                          newSlides[index].titleEn = e.target.value;
+                          updateSetting('hero', 'slides', newSlides);
+                        }} placeholder="Leave empty to use main title" />
+                      </div>
+                    </div>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>وصف الشريحة (AR)</label>
+                        <input type="text" className="form-control" value={slide.subtitle || ""} onChange={e => {
+                          const newSlides = [...data.settings.hero.slides];
+                          newSlides[index].subtitle = e.target.value;
+                          updateSetting('hero', 'slides', newSlides);
+                        }} />
+                      </div>
+                      <div className="form-group">
+                        <label>وصف الشريحة (EN)</label>
+                        <input type="text" className="form-control" value={slide.subtitleEn || ""} onChange={e => {
+                          const newSlides = [...data.settings.hero.slides];
+                          newSlides[index].subtitleEn = e.target.value;
+                          updateSetting('hero', 'slides', newSlides);
+                        }} />
                       </div>
                     </div>
                   </div>

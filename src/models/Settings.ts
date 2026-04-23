@@ -15,6 +15,10 @@ const SettingsSchema = new Schema(
         {
           url: { type: String, default: "/hero-bg.jpg" },
           type: { type: String, enum: ["image", "video"], default: "image" },
+          title: { type: String, default: "" },
+          titleEn: { type: String, default: "" },
+          subtitle: { type: String, default: "" },
+          subtitleEn: { type: String, default: "" },
         }
       ],
       media: { type: String, default: "/hero-bg.jpg" }, // Fallback

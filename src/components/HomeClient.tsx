@@ -100,14 +100,23 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
           ))}
         </div>
         <div className="hero-overlay" style={{ zIndex: 2 }}></div>
-        <div className="hero-content">
+        <div className="hero-content" style={{ zIndex: 3 }}>
           <div
+            key={currentSlide}
             className="hero-text"
-            data-aos={locale === "ar" ? "fade-left" : "fade-right"}
+            data-aos="fade-up"
             data-aos-duration="1000"
           >
-            <h1>{locale === 'ar' ? hero.title : hero.titleEn}</h1>
-            <p>{locale === 'ar' ? hero.subtitle : hero.subtitleEn}</p>
+            <h1>
+              {locale === 'ar' 
+                ? (slides[currentSlide]?.title || hero.title) 
+                : (slides[currentSlide]?.titleEn || hero.titleEn)}
+            </h1>
+            <p>
+              {locale === 'ar' 
+                ? (slides[currentSlide]?.subtitle || hero.subtitle) 
+                : (slides[currentSlide]?.subtitleEn || hero.subtitleEn)}
+            </p>
             <div className="hero-buttons">
               <Link href={`/${locale}/sale`} className="btn btn-accent">
                 <i className="fas fa-building"></i>
