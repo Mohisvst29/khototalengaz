@@ -505,34 +505,57 @@ export default function AdminPage() {
                         </select>
                       </div>
                       <div className="form-group">
-                        <label>رفع ملف (صورة/فيديو)</label>
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                          {slide.url && (
-                            slide.type === 'video' ? 
-                              <div style={{ width: '50px', height: '40px', background: '#000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="fas fa-video" style={{ color: 'white', fontSize: '12px' }}></i></div> :
-                              <img src={slide.url} alt="" style={{ width: '50px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
-                          )}
-                          <input type="file" onChange={async (e) => {
-                            const files = e.target.files;
-                            if (!files?.[0]) return;
-                            const file = files[0];
-                            const isVideo = file.type.startsWith('video/') || 
-                                            file.name.toLowerCase().endsWith('.mp4') || 
-                                            file.name.toLowerCase().endsWith('.webm') || 
-                                            file.name.toLowerCase().endsWith('.mov');
-                            
-                            const fd = new FormData();
-                            fd.append("files", file);
-                            const res = await fetch("/api/upload", { method: "POST", body: fd });
-                            const resData = await res.json();
-                            if (resData.urls?.[0]) {
+                        <label>رابط أو رفع ملف (صورة/فيديو)</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            value={slide.url || ""} 
+                            onChange={e => {
                               const newSlides = [...data.settings.hero.slides];
-                              newSlides[index].url = resData.urls[0];
-                              newSlides[index].type = isVideo ? 'video' : 'image';
+                              newSlides[index].url = e.target.value;
+                              // Auto-detect type if it's a video link
+                              if (e.target.value.match(/\.(mp4|webm|mov|ogg)/i)) {
+                                newSlides[index].type = 'video';
+                              }
                               updateSetting('hero', 'slides', newSlides);
-                              toast.success("تم الرفع بنجاح");
-                            }
-                          }} />
+                            }} 
+                            placeholder="أدخل رابط المقطع أو الصورة هنا..." 
+                          />
+                          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <input type="file" onChange={async (e) => {
+                              const files = e.target.files;
+                              if (!files?.[0]) return;
+                              const file = files[0];
+                              const isVideo = file.type.startsWith('video/') || 
+                                              file.name.toLowerCase().endsWith('.mp4') || 
+                                              file.name.toLowerCase().endsWith('.webm') || 
+                                              file.name.toLowerCase().endsWith('.mov');
+                              
+                              const fd = new FormData();
+                              fd.append("files", file);
+                              const res = await fetch("/api/upload", { method: "POST", body: fd });
+                              const resData = await res.json();
+                              if (resData.urls?.[0]) {
+                                const newSlides = [...data.settings.hero.slides];
+                                newSlides[index].url = resData.urls[0];
+                                newSlides[index].type = isVideo ? 'video' : 'image';
+                                updateSetting('hero', 'slides', newSlides);
+                                toast.success("تم الرفع بنجاح");
+                              }
+                            }} />
+                            {slide.url && (
+                              <div style={{ position: 'relative' }}>
+                                {slide.type === 'video' ? 
+                                  <div style={{ width: '80px', height: '45px', background: '#000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #ddd' }}>
+                                    <i className="fas fa-video" style={{ color: 'white' }}></i>
+                                    <span style={{ fontSize: '10px', color: 'white', position: 'absolute', bottom: '2px' }}>معاينة فيديو</span>
+                                  </div> :
+                                  <img src={slide.url} alt="" style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd' }} />
+                                }
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
