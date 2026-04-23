@@ -36,7 +36,10 @@ export default function ProjectsClient({ initialProjects }: any) {
           <div className="projects-grid" id="projectsGrid">
             {projects.map((project: any) => (
               <div key={project._id} className="project-card">
-                <img src={project.image} alt={project.title} />
+                <img 
+                  src={project.images?.[0] || project.image || "/placeholder-project.jpg"} 
+                  alt={project.title} 
+                />
                 <div className="project-overlay">
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>

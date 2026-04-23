@@ -10,6 +10,7 @@ const AOSInit = () => {
       once: true,
       offset: 50,
       duration: 1000,
+      disable: 'mobile'
     });
   }, []);
 

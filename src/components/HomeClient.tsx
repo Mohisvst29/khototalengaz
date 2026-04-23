@@ -8,13 +8,22 @@ import Counter from "./Counter";
 import { useParams } from "next/navigation";
 import { getTranslation } from "@/lib/i18n";
 
-export default function HomeClient({ initialProperties, initialBlogs }: any) {
+export default function HomeClient({ initialProperties, initialBlogs, settings }: any) {
   const [featuredProperties, setFeaturedProperties] = useState(initialProperties);
   const [latestBlogs, setLatestBlogs] = useState(initialBlogs);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const params = useParams();
   const locale = (params?.locale as string) || "ar";
   const t = getTranslation(locale);
+
+  const hero = settings?.hero || {
+    title: t.hero.title,
+    titleEn: t.hero.title,
+    subtitle: t.hero.subtitle,
+    subtitleEn: t.hero.subtitle,
+    media: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
+    mediaType: "image"
+  };
 
   useEffect(() => {
     // Re-fetch in client if needed or just use initial data
@@ -40,14 +49,29 @@ export default function HomeClient({ initialProperties, initialBlogs }: any) {
       {/* Hero Section */}
       <section className="hero">
         <div id="heroMediaContainer" className="hero-media-container">
-          <Image
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
-            alt={t.hero.title}
-            fill
-            priority
-            className="hero-media-item active"
-            style={{ objectFit: "cover" }}
-          />
+          {hero.mediaType === 'video' ? (
+            <video 
+              src={hero.media} 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="hero-video active"
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
+          ) : (
+            <div 
+              className="hero-media-item active"
+              style={{ 
+                backgroundImage: `url('${hero.media}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                width: '100%',
+                height: '100%',
+                opacity: 1
+              }}
+            />
+          )}
         </div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
@@ -56,8 +80,8 @@ export default function HomeClient({ initialProperties, initialBlogs }: any) {
             data-aos={locale === "ar" ? "fade-left" : "fade-right"}
             data-aos-duration="1000"
           >
-            <h1>{t.hero.title}</h1>
-            <p>{t.hero.subtitle}</p>
+            <h1>{locale === 'ar' ? hero.title : hero.titleEn}</h1>
+            <p>{locale === 'ar' ? hero.subtitle : hero.subtitleEn}</p>
             <div className="hero-buttons">
               <Link href={`/${locale}/sale`} className="btn btn-accent">
                 <i className="fas fa-building"></i>
@@ -139,14 +163,18 @@ export default function HomeClient({ initialProperties, initialBlogs }: any) {
             {featuredProperties.map((p: any) => (
               <div key={p._id} className="property-card">
                 <div className="property-image">
-                  <img src={p.image} alt={p.title} loading="lazy" />
+                  <img 
+                    src={p.images?.[0] || p.image || "/placeholder-property.jpg"} 
+                    alt={p.title} 
+                    loading="lazy" 
+                  />
                   <span className={`property-badge ${p.category === 'rent' ? 'rent' : ''}`}>
                     {p.category === 'sale' ? t.property.sale : t.property.rent}
                   </span>
                 </div>
                 <div className="property-content">
                   <div className="property-price">
-                    {p.price.toLocaleString()} {t.property.sar}
+                    {p.price?.toLocaleString()} {t.property.sar}
                   </div>
                   <h3 className="property-title">{p.title}</h3>
                   <div className="property-location">

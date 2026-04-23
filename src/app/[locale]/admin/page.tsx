@@ -11,7 +11,7 @@ export default function AdminPage() {
   
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [data, setData] = useState({
+  const [data, setData] = useState<any>({
     properties: [],
     projects: [],
     requests: [],
@@ -82,6 +82,8 @@ export default function AdminPage() {
       if (res.ok) {
         toast.success(locale === 'ar' ? "تم الحذف بنجاح" : "Deleted successfully");
         fetchData();
+      } else {
+        toast.error("Error deleting item");
       }
     } catch (error) {
       toast.error("Error deleting item");
@@ -146,7 +148,7 @@ export default function AdminPage() {
   };
 
   const updateSetting = (section: string, field: string, value: any) => {
-    setData(prev => ({
+    setData((prev: any) => ({
       ...prev,
       settings: {
         ...prev.settings,
@@ -201,7 +203,7 @@ export default function AdminPage() {
       setFormData(item);
     } else {
       if (type === 'properties') {
-        setFormData({ title: "", price: "", city: "riyadh", type: "apartment", category: "sale", images: [], rooms: 3, area: 150, description: "وصف العقار هنا" });
+        setFormData({ title: "", price: "", city: "riyadh", location: "", type: "apartment", category: "sale", images: [], rooms: 3, area: 150, description: "وصف العقار هنا" });
       } else if (type === 'projects') {
         setFormData({ title: "", description: "", images: [] });
       }
@@ -707,6 +709,21 @@ export default function AdminPage() {
                           <option value="riyadh">الرياض</option>
                           <option value="jeddah">جدة</option>
                           <option value="dammam">الدمام</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>الحي / الموقع</label>
+                        <input type="text" className="form-control" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} required placeholder="مثال: الملقا" />
+                      </div>
+                      <div className="form-group">
+                        <label>النوع</label>
+                        <select className="form-control" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                          <option value="apartment">شقة</option>
+                          <option value="villa">فيلا</option>
+                          <option value="floor">دور</option>
+                          <option value="office">مكتب</option>
                         </select>
                       </div>
                     </div>

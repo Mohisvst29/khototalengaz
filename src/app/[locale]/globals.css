@@ -17,9 +17,26 @@
     --shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
     --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Tajawal','Inter',sans-serif;background:var(--white);color:var(--text);line-height:1.6;overflow-x:hidden;}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: 'Tajawal', 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.6;
+}
 body[dir="ltr"]{font-family:'Inter','Tajawal',sans-serif;}
 ::-webkit-scrollbar{width:8px;}
 ::-webkit-scrollbar-track{background:var(--secondary);}
@@ -75,7 +92,16 @@ body[dir="rtl"] .announcement-track-scrolling {
 /* Header */
 .header{background:var(--white);box-shadow:var(--shadow);position:sticky;top:0;z-index:1000;transition:all 0.3s;}
 .header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,0.1);}
-.header-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:90px;}
+.header-inner{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:80px;
+    width: 100%;
+}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--primary);}
 .logo-text h1{font-size:20px;font-weight:800;line-height:1.2;color:var(--primary);}
 .logo-text span{font-size:12px;color:var(--text-light);font-weight:500;}
@@ -270,6 +296,8 @@ body[dir="ltr"] .admin-layout {
     transition: all 0.3s ease;
     box-shadow: 4px 0 10px rgba(0,0,0,0.05);
 }
+
+
 
 .admin-logo {
     padding: 30px 24px;
@@ -548,52 +576,66 @@ body[dir="ltr"] .toast{border-right:none;border-left:4px solid var(--success);}
 .page.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-/* Responsive */
+/* Improved Responsive System */
 @media(max-width:1024px){
-    .admin-layout {
-        grid-template-columns: 1fr;
-    }
-    .admin-sidebar {
-        position: fixed;
-        right: -100%;
-        width: 260px;
-        transition: all 0.3s ease;
-    }
-    body[dir="ltr"] .admin-sidebar {
-        right: auto;
-        left: -100%;
-    }
-    .admin-sidebar.open {
-        right: 0;
-    }
-    body[dir="ltr"] .admin-sidebar.open {
-        left: 0;
-    }
-    .admin-main {
-        padding: 16px;
-    }
-    .hero-content{grid-template-columns:1fr;text-align:center;}
-    .hero-text h1{font-size:36px;}
-    .about-content,.contact-grid{grid-template-columns:1fr;}
-    .footer-grid{grid-template-columns:1fr 1fr;}
-    .stats-grid{grid-template-columns:repeat(2, 1fr);}
+    .admin-layout { grid-template-columns: 1fr; }
+    .admin-sidebar { position: fixed; right: -100%; width: 260px; transition: all 0.3s ease; }
+    body[dir="ltr"] .admin-sidebar { right: auto; left: -100%; }
+    .admin-sidebar.open { right: 0; }
+    body[dir="ltr"] .admin-sidebar.open { left: 0; }
+    .admin-main { padding: 16px; }
+    .hero-content{ text-align:center; }
+    .hero-text h1{ font-size:36px; }
+    .about-content, .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
 @media(max-width:768px){
-    .nav-desktop{display:none;}
-    .mobile-menu-btn{display:block;}
-    .header-actions .btn{display:none;}
-    .header-inner{height:80px;}
-    .hero{height:auto;padding:100px 0 60px;}
-    .hero-text h1{font-size:28px;}
-    .form-grid{grid-template-columns:1fr;}
-    .properties-grid{grid-template-columns:1fr;}
-    .section{padding:60px 0;}
-    .section-header h2{font-size:28px;}
-    .footer-grid{grid-template-columns:1fr;gap:32px;}
-    .filters-bar{flex-direction:column;}
-    .filter-group{width:100%;}
-    .stats-grid{grid-template-columns:1fr;}
-    table{display:block;overflow-x:auto;}
-    .page-banner h1{font-size:28px;}
-    .about-content{grid-template-columns:1fr;}
+    .nav-desktop { display:none; }
+    .mobile-menu-btn { display:flex; align-items: center; justify-content: center; }
+    .header-actions .btn { display:none; }
+    .header-inner { height:70px; padding: 0 15px; }
+    .logo img { height: 45px !important; }
+    .hero { height:auto; min-height: 450px; padding:100px 0 60px; }
+    .hero-text h1 { font-size:26px; line-height: 1.3; margin-bottom: 15px; }
+    .hero-text p { font-size:15px; margin-bottom: 25px; }
+    .hero-buttons { flex-direction:column; gap: 10px; width: 100%; max-width: 280px; margin: 0 auto; }
+    .hero-buttons .btn { width: 100%; justify-content: center; padding: 10px 20px; font-size: 14px; }
+    .container { padding: 0 15px; width: 100%; }
+    .section { padding: 40px 0; }
+    .section-header { margin-bottom: 30px; }
+    .section-header h2 { font-size: 24px; }
+    .features-grid, .properties-grid, .projects-grid { grid-template-columns: 1fr; gap: 20px; }
+    .feature-card { padding: 30px 20px; }
+    .stats-row { grid-template-columns: 1fr; gap: 20px; }
+    .stat-value { font-size: 36px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+    .footer-social { justify-content: center; }
+    .footer-links a { justify-content: center; }
+    .filters-bar { flex-direction:column; gap: 12px; padding: 15px; }
+    .filter-group { width:100%; min-width: 0; }
+    .page-banner { padding: 80px 0 40px; }
+    .page-banner h1 { font-size:26px; }
+    img { max-width: 100%; height: auto; }
+}
+
+@media(max-width: 480px) {
+    .hero-text h1 { font-size: 22px; }
+    .logo-text h1 { font-size: 15px; }
+    .btn { padding: 10px 16px; font-size: 14px; }
+    .container, .header-inner, .section, .footer, .announcement-bar {
+        overflow: hidden;
+        max-width: 100vw;
+    }
+}
+
+/* Defensive fix for any stray horizontal scroll */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+* {
+    box-sizing: border-box !important;
 }

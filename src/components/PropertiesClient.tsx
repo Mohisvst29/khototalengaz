@@ -135,7 +135,11 @@ const PropertiesClient = ({ title, subtitle, category }: any) => {
               filteredProperties.map((p: any) => (
                 <div key={p._id} className="property-card">
                   <div className="property-image">
-                    <img src={p.image} alt={p.title} loading="lazy" />
+                    <img 
+                      src={p.images?.[0] || "/placeholder-property.jpg"} 
+                      alt={p.title} 
+                      loading="lazy" 
+                    />
                     <span
                       className={`property-badge ${
                         p.category === "rent" ? "rent" : ""
