@@ -60,11 +60,14 @@ export default function ServicesClient() {
       <section className="section">
         <div className="container">
           <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '30px' }}>
-            {services.map((service, index) => {
-              const data = t.services.list[service.key];
+            {services.map((service: any, index: number) => {
+              const displayTitle = service.title;
+              const displayDesc = service.desc;
+              const displaySlug = service.slug;
+
               return (
                 <div 
-                  key={service.key} 
+                  key={service.slug} 
                   className="service-card-full" 
                   data-aos="fade-up" 
                   data-aos-delay={index * 100}
@@ -80,7 +83,7 @@ export default function ServicesClient() {
                   <div className="service-img-wrapper" style={{ height: '220px', position: 'relative', overflow: 'hidden' }}>
                     <img 
                       src={service.img} 
-                      alt={data.title} 
+                      alt={displayTitle} 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                     <div className="service-icon-badge" style={{
@@ -103,13 +106,13 @@ export default function ServicesClient() {
                   </div>
                   <div className="service-body" style={{ padding: '30px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--primary)', marginBottom: '15px' }}>
-                      {data.title}
+                      {displayTitle}
                     </h3>
                     <p style={{ color: 'var(--text-light)', lineHeight: '1.7', marginBottom: '20px', fontSize: '15px' }}>
-                      {data.desc}
+                      {displayDesc}
                     </p>
                     <Link 
-                      href={`/${locale}/services/${data.slug}`} 
+                      href={`/${locale}/services/${displaySlug}`} 
                       className="btn btn-outline btn-sm"
                       style={{ width: '100%', justifyContent: 'center' }}
                     >
