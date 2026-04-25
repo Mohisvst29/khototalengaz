@@ -124,7 +124,7 @@ const Hero = () => {
 
       {slides.length > 1 && (
         <div className="absolute bottom-8 left-0 right-0 z-30 flex justify-center gap-3">
-          {slides.map((_, idx) => (
+          {slides.map((_: any, idx: number) => (
             <button key={idx} onClick={() => setCurrentSlide(idx)} className={`h-2 rounded-full transition-all duration-300 ${currentSlide === idx ? 'bg-[#c9a227] w-10' : 'bg-white/40 w-2'}`} />
           ))}
         </div>
