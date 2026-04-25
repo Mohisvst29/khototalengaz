@@ -13,7 +13,14 @@ export default function AboutClient() {
 
   React.useEffect(() => {
     fetch("/api/settings").then(res => res.json()).then(data => {
-      if (!data.error) setSettings(data);
+      if (!data.error) {
+        setSettings(data);
+        // Refresh animations after dynamic content loads
+        setTimeout(() => {
+          const AOS = require("aos");
+          AOS.refresh();
+        }, 500);
+      }
     });
   }, []);
 

@@ -10,8 +10,9 @@ const AOSInit = () => {
       once: true,
       offset: 50,
       duration: 1000,
-      disable: 'mobile'
     });
+    // Refresh to handle dynamic content
+    AOS.refresh();
   }, []);
 
   return null;
