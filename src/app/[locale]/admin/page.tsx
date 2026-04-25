@@ -426,11 +426,26 @@ export default function AdminPage() {
     <div className="settings-container">
       <style jsx>{`
         .settings-container { background: white; border-radius: 20px; padding: 32px; border: 1px solid #f1f5f9; }
-        .settings-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
-        .settings-tabs button { padding: 10px 20px; border-radius: 8px; border: none; background: #f8fafc; color: #64748b; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .settings-tabs { 
+          display: flex; 
+          gap: 10px; 
+          margin-bottom: 30px; 
+          border-bottom: 1px solid #f1f5f9; 
+          padding-bottom: 15px; 
+          overflow-x: auto;
+          white-space: nowrap;
+          -webkit-overflow-scrolling: touch;
+        }
+        .settings-tabs::-webkit-scrollbar { height: 4px; }
+        .settings-tabs::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .settings-tabs button { padding: 10px 20px; border-radius: 8px; border: none; background: #f8fafc; color: #64748b; cursor: pointer; font-weight: 600; transition: all 0.2s; flex-shrink: 0; }
         .settings-tabs button.active { background: var(--admin-primary); color: white; }
         .settings-section { animation: fadeIn 0.3s ease; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        @media (max-width: 768px) {
+          .settings-container { padding: 16px; }
+          .form-row { grid-template-columns: 1fr; gap: 15px; }
+        }
       `}</style>
       
       <div className="settings-tabs">
