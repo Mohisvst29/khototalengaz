@@ -64,6 +64,16 @@ export default function ContactClient() {
     }
   };
 
+  const getMapSrc = (link: string) => {
+    if (!link) return "";
+    // If it's a full iframe tag, extract the src
+    if (link.includes("<iframe")) {
+      const match = link.match(/src="([^"]+)"/);
+      return match ? match[1] : "";
+    }
+    return link;
+  };
+
   return (
     <div className="page active" id="page-contact">
       <div className="page-banner">
@@ -174,7 +184,7 @@ export default function ContactClient() {
             </div>
             <div className="map-container">
               <iframe
-                src={contactInfo.mapLink}
+                src={getMapSrc(contactInfo.mapLink)}
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: "500px" }}
