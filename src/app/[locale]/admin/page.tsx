@@ -556,59 +556,59 @@ export default function AdminPage() {
                           <input 
                             type="text" 
                             className="form-control" 
+                            placeholder="انسخ رابط الصورة المباشر هنا"
                             value={slide.url || ""} 
                             onChange={e => {
                               const newSlides = [...data.settings.hero.slides];
                               newSlides[index].url = e.target.value;
-                              // Auto-detect type if it's a video link
                               if (e.target.value.match(/\.(mp4|webm|mov|ogg)/i)) {
                                 newSlides[index].type = 'video';
-                        <input 
-                          type="text" 
-                          className="form-control" 
-                          placeholder="انسخ رابط الصورة المباشر هنا"
-                          value={slide.url || ""} 
-                          onChange={e => {
-                            const newSlides = [...data.settings.hero.slides];
-                            newSlides[index].url = e.target.value;
-                            updateSetting('hero', 'slides', newSlides);
-                          }} 
-                        />
-                        <p style={{ fontSize: '10px', color: '#854d0e', marginTop: '5px' }}>
-                          * يرجى استخدام روابط مباشرة تنتهي بـ .jpg أو .png. روابط Pinterest لا تعمل مباشرة.
-                        </p>
-                        {slide.url && (
-                          <div style={{ marginTop: '10px', height: '60px', overflow: 'hidden', borderRadius: '6px', border: '1px solid #ddd' }}>
-                            <img src={slide.url} alt="معاينة" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => (e.target as HTMLImageElement).src = 'https://placehold.co/200x60?text=Invalid+Link'} />
-                          </div>
-                        )}
-                        <input 
-                          type="file" 
-                          style={{ marginTop: '10px', fontSize: '12px' }}
-                          onChange={async e => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const isVideo = file.type.startsWith('video/');
-                              const formData = new FormData();
-                              formData.append('files', file);
-                              const res = await fetch('/api/upload', { method: 'POST', body: formData });
-                              const resData = await res.json();
-                              if (resData.urls?.[0]) {
-                                const newSlides = [...data.settings.hero.slides];
-                                newSlides[index].url = resData.urls[0];
-                                newSlides[index].type = isVideo ? 'video' : 'image';
-                                updateSetting('hero', 'slides', newSlides);
-                                toast.success("تم الرفع بنجاح");
+                              } else {
+                                newSlides[index].type = 'image';
                               }
-                            }} />
-                            {slide.url && (
-                              <div style={{ position: 'relative' }}>
-                                {slide.type === 'video' ? 
-                                  <div style={{ width: '80px', height: '45px', background: '#000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #ddd' }}>
-                                    <i className="fas fa-video" style={{ color: 'white' }}></i>
-                                    <span style={{ fontSize: '10px', color: 'white', position: 'absolute', bottom: '2px' }}>معاينة فيديو</span>
-                                  </div> :
-                                  <img src={slide.url} alt="" style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd' }} />
+                              updateSetting('hero', 'slides', newSlides);
+                            }} 
+                          />
+                          <p style={{ fontSize: '10px', color: '#854d0e', marginTop: '0px' }}>
+                            * يرجى استخدام روابط مباشرة تنتهي بـ .jpg أو .png. روابط Pinterest لا تعمل مباشرة.
+                          </p>
+
+                          {slide.url && (
+                            <div style={{ height: '80px', overflow: 'hidden', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff' }}>
+                              {slide.type === 'video' ? (
+                                <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', color: '#64748b' }}>
+                                  فيديو (لا يوجد معاينة)
+                                </div>
+                              ) : (
+                                <img 
+                                  src={slide.url} 
+                                  alt="معاينة" 
+                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  onError={(e) => (e.target as HTMLImageElement).src = 'https://placehold.co/400x100?text=Invalid+Image+Link'} 
+                                />
+                              )}
+                            </div>
+                          )}
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <span style={{ fontSize: '12px', color: '#64748b' }}>أو ارفع من جهازك:</span>
+                            <input 
+                              type="file" 
+                              style={{ fontSize: '12px' }}
+                              onChange={async e => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const isVideo = file.type.startsWith('video/');
+                                  const formData = new FormData();
+                                  formData.append('files', file);
+                                  const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                                  const resData = await res.json();
+                                  if (resData.urls?.[0]) {
+                                    const newSlides = [...data.settings.hero.slides];
+                                    newSlides[index].url = resData.urls[0];
+                                    newSlides[index].type = isVideo ? 'video' : 'image';
+                                    updateSetting('hero', 'slides', newSlides);
+                                  }
                                 }
                               </div>
                             )}
