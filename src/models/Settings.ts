@@ -11,16 +11,7 @@ const SettingsSchema = new Schema(
       titleEn: { type: String, default: "Khotot Al-Engaz Real Estate Development" },
       subtitle: { type: String, default: "نحن هنا لنساعدك في العثور على بيت أحلامك" },
       subtitleEn: { type: String, default: "We are here to help you find your dream home" },
-      slides: [
-        {
-          url: { type: String, default: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80" },
-          type: { type: String, enum: ["image", "video"], default: "image" },
-          title: { type: String, default: "" },
-          titleEn: { type: String, default: "" },
-          subtitle: { type: String, default: "" },
-          subtitleEn: { type: String, default: "" },
-        }
-      ],
+      slides: [],
       media: { type: String, default: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80" }, // Fallback
       mediaType: { type: String, enum: ["image", "video"], default: "image" }, // Fallback
     },
