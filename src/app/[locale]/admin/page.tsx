@@ -389,14 +389,14 @@ export default function AdminPage() {
       <table>
         <thead>
           <tr>
-            {columns.map(col => <th key={col.key}>{col.name}</th>)}
+            {columns.map((col: any) => <th key={col.key}>{col.name}</th>)}
             <th>الإجراءات</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item: any) => (
             <tr key={item._id}>
-              {columns.map(col => (
+              {columns.map((col: any) => (
                 <td key={col.key}>
                   {col.key === 'image' || col.key === 'images' ? (
                     <img src={Array.isArray(item.images) ? item.images[0] : item.image} alt="" style={{ width: '50px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
@@ -771,7 +771,7 @@ export default function AdminPage() {
         {activeSettingsTab === 'services' && (
           <div className="settings-section">
             <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>إدارة الأقسام الثلاثة الرئيسية</h3>
-            {[0, 1, 2].map((index) => (
+            {[0, 1, 2].map((index: number) => (
               <div key={index} className="service-edit-box" style={{ padding: '20px', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '20px', background: '#f8fafc' }}>
                 <h4 style={{ marginBottom: '15px' }}>القسم {index + 1}</h4>
                 <div className="form-group">
@@ -1095,7 +1095,7 @@ export default function AdminPage() {
           <button className="mobile-only" onClick={() => setSidebarOpen(false)} style={{ background: 'none', border: 'none', color: 'white', fontSize: '24px', cursor: 'pointer' }}>&times;</button>
         </div>
         <ul className="admin-nav">
-          {navItems.map((item) => (
+          {navItems.map((item: any) => (
             <li key={item.key}>
               <a href="#" className={currentPage === item.key ? "active" : ""} onClick={(e) => { e.preventDefault(); setCurrentPage(item.key); setSidebarOpen(false); }}>
                 <i className={`fas ${item.icon}`}></i> {item.name}

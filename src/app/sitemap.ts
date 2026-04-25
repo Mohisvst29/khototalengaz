@@ -20,8 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contact",
   ];
 
-  const staticRoutes = locales.flatMap((locale) => 
-    staticPaths.map((path) => ({
+  const staticRoutes = locales.flatMap((locale: string) => 
+    staticPaths.map((path: string) => ({
       url: `${baseUrl}/${locale}${path}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     await connectToDatabase();
     const dbBlogs = await Blog.find({}, "slug updatedAt").lean();
     
-    blogRoutes = locales.flatMap((locale) => 
+    blogRoutes = locales.flatMap((locale: string) => 
       dbBlogs.map((post: any) => ({
         url: `${baseUrl}/${locale}/blog/${post.slug}`,
         lastModified: post.updatedAt || new Date(),
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const dbProps = await Property.find({}, "_id updatedAt").lean();
     
-    propertyRoutes = locales.flatMap((locale) => 
+    propertyRoutes = locales.flatMap((locale: string) => 
       dbProps.map((prop: any) => ({
         url: `${baseUrl}/${locale}/properties/${prop._id}`,
         lastModified: prop.updatedAt || new Date(),

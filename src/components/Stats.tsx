@@ -16,7 +16,7 @@ const Stats = () => {
       
       <div className="max-w-[1280px] mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-20">
-          {stats.map((stat, idx) => (
+          {stats.map((stat: any, idx: number) => (
             <div key={idx} className="text-center group">
               <div className="text-5xl md:text-7xl font-black mb-3 md:mb-4 text-white transition-transform duration-500 group-hover:scale-110 group-hover:text-accent">
                 {stat.value}

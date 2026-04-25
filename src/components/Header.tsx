@@ -139,7 +139,7 @@ const Header = () => {
         onClick={toggleMobileMenu}
       ></div>
       <div className={`mobile-menu ${isMenuOpen ? "open" : ""}`} id="mobileMenu">
-        {navLinks.map((link) => (
+        {navLinks.map((link: any) => (
           link.dropdown ? (
             <div key={link.path}>
               <button 
@@ -150,7 +150,7 @@ const Header = () => {
                 <i className={`fas fa-chevron-${isServicesOpen ? 'up' : 'down'}`}></i>
               </button>
               <div className={`mobile-dropdown-content ${isServicesOpen ? 'open' : ''}`}>
-                {link.dropdown.map((sub) => (
+                {link.dropdown.map((sub: any) => (
                   <Link
                     key={sub.path}
                     href={sub.path}
