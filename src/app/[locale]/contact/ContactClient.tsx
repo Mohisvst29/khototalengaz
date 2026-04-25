@@ -68,33 +68,32 @@ export default function ContactClient() {
     if (!link) return "";
     
     // 1. If it's a full iframe tag, extract the src
-    if (link.includes("<iframe")) {
-      const match = link.match(/src="([^"]+)"/);
-      return match ? match[1] : "";
+    // Using a more robust regex for src attribute
+    if (link.includes("<iframe") || link.includes("<IFRAME")) {
+      const match = link.match(/src=["']([^"']+)["']/i);
+      if (match && match[1]) return match[1];
     }
     
-    // 2. If it's a short link (maps.app.goo.gl), we can't easily convert it on client
-    // but we can detect it.
-    if (link.includes("maps.app.goo.gl")) {
-      return link; // This will likely fail in iframe, but we'll handle it below
+    // 2. Remove any accidental whitespace or quotes if they just pasted the URL with quotes
+    let cleanLink = link.trim().replace(/^["']|["']$/g, '');
+
+    // 3. If it's a short link (maps.app.goo.gl)
+    if (cleanLink.includes("maps.app.goo.gl")) {
+      return cleanLink; 
     }
 
-    // 3. If it's a regular google maps URL but not the embed one
-    if (link.includes("google.com/maps") && !link.includes("output=embed") && !link.includes("/embed")) {
-      // Try to extract query or coordinates
-      const qMatch = link.match(/place\/([^\/]+)/);
-      if (qMatch) {
-        return `https://maps.google.com/maps?q=${qMatch[1]}&output=embed`;
-      }
-      const coordMatch = link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-      if (coordMatch) {
-        return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
-      }
-      // General fallback for any google maps link
-      return link.replace("/maps", "/maps").split('?')[0] + "?output=embed";
+    // 4. Handle regular google maps URLs by converting to legacy embed format
+    if (cleanLink.includes("google.com/maps") && !cleanLink.includes("output=embed") && !cleanLink.includes("/embed")) {
+      const qMatch = cleanLink.match(/place\/([^\/]+)/);
+      if (qMatch) return `https://maps.google.com/maps?q=${qMatch[1]}&output=embed`;
+      
+      const coordMatch = cleanLink.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+      if (coordMatch) return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
+      
+      return cleanLink.split('?')[0] + "?output=embed";
     }
 
-    return link;
+    return cleanLink;
   };
 
   return (
