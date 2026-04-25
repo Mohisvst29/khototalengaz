@@ -10,7 +10,7 @@ import { Metadata } from "next";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: locale === 'ar' ? "الرئيسية | شركة خطوط الإنجاز للعقارات" : "Home | Khotot Al-Engaz Real Estate",
+    title: locale === 'ar' ? "الرئيسية | شركة خطوط الإنجاز للتطوير العقاري" : "Home | Khotot Al-Engaz Real Estate Development",
     description: locale === 'ar' 
       ? "اكتشف أفضل العقارات في الرياض مع خطوط الإنجاز. فيلات وشقق ومشاريع سكنية وتجارية بمعايير حديثة."
       : "Discover the best properties in Riyadh with Khotot Al-Engaz. Villas, apartments, and residential/commercial projects with modern standards.",
@@ -48,7 +48,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": locale === 'ar' ? "خطوط الإنجاز للعقارات" : "Khotot Al-Engaz Real Estate",
+    "name": locale === 'ar' ? "خطوط الإنجاز للتطوير العقاري" : "Khotot Al-Engaz Real Estate Development",
     "url": `https://khotot-alengaz.com/${locale}`,
     "potentialAction": {
       "@type": "SearchAction",

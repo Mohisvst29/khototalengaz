@@ -17,9 +17,9 @@ async function getProjects() {
   try {
     await connectToDatabase();
     const projects = await Project.find({}).sort({ createdAt: -1 }).lean() || [];
-    return projects.length > 0 ? JSON.parse(JSON.stringify(projects)) : mockProjects;
+    return JSON.parse(JSON.stringify(projects));
   } catch (error) {
-    return mockProjects;
+    return [];
   }
 }
 

@@ -54,7 +54,16 @@ export default function AdminPage() {
       },
       social: {
         twitter: "", instagram: "", linkedin: "", snapchat: "", tiktok: "", facebook: ""
-      }
+      },
+      serviceList: [
+        { slug: "residential-development", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "building-restructuring", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "commercial-development", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "project-management", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "real-estate-investment", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "property-management", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+        { slug: "sales-and-leasing", title: "", titleEn: "", description: "", descriptionEn: "", image: "" },
+      ]
     },
   });
   const [activeSettingsTab, setActiveSettingsTab] = useState("branding");
@@ -84,13 +93,24 @@ export default function AdminPage() {
         settingsRes.json(),
       ]);
 
+      const mergedSettings = (settings && !settings.error) ? {
+        ...data.settings,
+        ...settings,
+        serviceList: (settings.serviceList && settings.serviceList.length >= 7) 
+          ? settings.serviceList 
+          : data.settings.serviceList.map((defaultService: any) => {
+              const existing = settings.serviceList?.find((s: any) => s.slug === defaultService.slug);
+              return existing || defaultService;
+            })
+      } : data.settings;
+
       setData({ 
         properties, 
         projects, 
         blogs,
         requests, 
         messages, 
-        settings: (settings && !settings.error) ? settings : data.settings 
+        settings: mergedSettings
       });
     } catch (error) {
       toast.error("Error fetching data");
@@ -419,7 +439,8 @@ export default function AdminPage() {
         <button className={activeSettingsTab === 'announcement' ? 'active' : ''} onClick={() => setActiveSettingsTab('announcement')}>الشريط الإعلاني</button>
         <button className={activeSettingsTab === 'contact' ? 'active' : ''} onClick={() => setActiveSettingsTab('contact')}>التواصل</button>
         <button className={activeSettingsTab === 'about' ? 'active' : ''} onClick={() => setActiveSettingsTab('about')}>عن الشركة</button>
-        <button className={activeSettingsTab === 'services' ? 'active' : ''} onClick={() => setActiveSettingsTab('services')}>الخدمات (3 أقسام)</button>
+        <button className={activeSettingsTab === 'services' ? 'active' : ''} onClick={() => setActiveSettingsTab('services')}>أقسام الصفحة الرئيسية</button>
+        <button className={activeSettingsTab === 'serviceList' ? 'active' : ''} onClick={() => setActiveSettingsTab('serviceList')}>قائمة الخدمات (7 خدمات)</button>
         <button className={activeSettingsTab === 'seo' ? 'active' : ''} onClick={() => setActiveSettingsTab('seo')}>السيو (SEO)</button>
         <button className={activeSettingsTab === 'social' ? 'active' : ''} onClick={() => setActiveSettingsTab('social')}>التواصل الاجتماعي</button>
         <button className={activeSettingsTab === 'security' ? 'active' : ''} onClick={() => setActiveSettingsTab('security')}>الأمان</button>
@@ -649,8 +670,51 @@ export default function AdminPage() {
                 <input type="text" className="form-control" value={data.settings.contact.whatsapp} onChange={e => updateSetting('contact', 'whatsapp', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>البريد الإلكتروني</label>
+                <label>البريد الإلكتروني (الرئيسي)</label>
                 <input type="email" className="form-control" value={data.settings.contact.email} onChange={e => updateSetting('contact', 'email', e.target.value)} />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>قائمة رسائل البريد الإلكتروني الإضافية</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+                {(data.settings.contact.emails || []).map((email: string, idx: number) => (
+                  <div key={idx} style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="email" 
+                      className="form-control" 
+                      value={email} 
+                      onChange={e => {
+                        const newEmails = [...(data.settings.contact.emails || [])];
+                        newEmails[idx] = e.target.value;
+                        updateSetting('contact', 'emails', newEmails);
+                      }} 
+                    />
+                    <button 
+                      type="button" 
+                      className="btn btn-danger" 
+                      style={{ padding: '0 15px', background: 'var(--admin-danger)', color: 'white', borderRadius: '8px' }}
+                      onClick={() => {
+                        const newEmails = [...(data.settings.contact.emails || [])];
+                        newEmails.splice(idx, 1);
+                        updateSetting('contact', 'emails', newEmails);
+                      }}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
+                ))}
+                <button 
+                  type="button" 
+                  className="btn btn-outline" 
+                  style={{ alignSelf: 'flex-start' }}
+                  onClick={() => {
+                    const newEmails = [...(data.settings.contact.emails || []), ""];
+                    updateSetting('contact', 'emails', newEmails);
+                  }}
+                >
+                  <i className="fas fa-plus"></i> إضافة بريد إلكتروني آخر
+                </button>
               </div>
             </div>
             <div className="form-group">
@@ -772,6 +836,85 @@ export default function AdminPage() {
                       if (!newServices[index]) newServices[index] = {};
                       newServices[index].descriptionEn = e.target.value;
                       setData((prev: any) => ({ ...prev, settings: { ...prev.settings, services: newServices } }));
+                    }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeSettingsTab === 'serviceList' && (
+          <div className="settings-section">
+            <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>إدارة الخدمات الرئيسية (7 خدمات)</h3>
+            <p style={{ marginBottom: '20px', color: 'var(--text-light)', fontSize: '14px' }}>هذه الخدمات تظهر في القائمة المنسدلة وفي صفحة الخدمات.</p>
+            
+            {(data.settings.serviceList || []).map((service: any, index: number) => (
+              <div key={index} className="service-edit-box" style={{ padding: '20px', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '20px', background: '#f8fafc' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                  <h4 style={{ margin: 0 }}>الخدمة: {service.slug}</h4>
+                  <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>رابط الخدمة: /services/{service.slug}</span>
+                </div>
+                
+                <div className="form-group">
+                  <label>صورة الخدمة</label>
+                  <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginTop: '10px' }}>
+                    {service.image && (
+                      <img src={service.image} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }} />
+                    )}
+                    <input type="file" onChange={async (e) => {
+                      const files = e.target.files;
+                      if (!files?.[0]) return;
+                      const fd = new FormData();
+                      fd.append("files", files[0]);
+                      const res = await fetch("/api/upload", { method: "POST", body: fd });
+                      const resData = await res.json();
+                      if (resData.urls?.[0]) {
+                        const newList = [...(data.settings.serviceList || [])];
+                        newList[index].image = resData.urls[0];
+                        setData((prev: any) => ({
+                          ...prev,
+                          settings: { ...prev.settings, serviceList: newList }
+                        }));
+                      }
+                    }} />
+                  </div>
+                </div>
+
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>العنوان (عربي)</label>
+                    <input type="text" className="form-control" value={service.title || ""} onChange={e => {
+                      const newList = [...(data.settings.serviceList || [])];
+                      newList[index].title = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, serviceList: newList } }));
+                    }} />
+                  </div>
+                  <div className="form-group">
+                    <label>العنوان (English)</label>
+                    <input type="text" className="form-control" value={service.titleEn || ""} onChange={e => {
+                      const newList = [...(data.settings.serviceList || [])];
+                      newList[index].titleEn = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, serviceList: newList } }));
+                    }} />
+                  </div>
+                </div>
+
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>نظرة عامة على الخدمة (عربي)</label>
+                    <textarea className="form-control" rows={3} value={service.description || ""} onChange={e => {
+                      const newList = [...(data.settings.serviceList || [])];
+                      newList[index].description = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, serviceList: newList } }));
+                    }} />
+                  </div>
+                  <div className="form-group">
+                    <label>Service Overview (English)</label>
+                    <textarea className="form-control" rows={3} value={service.descriptionEn || ""} onChange={e => {
+                      const newList = [...(data.settings.serviceList || [])];
+                      newList[index].descriptionEn = e.target.value;
+                      setData((prev: any) => ({ ...prev, settings: { ...prev.settings, serviceList: newList } }));
                     }} />
                   </div>
                 </div>

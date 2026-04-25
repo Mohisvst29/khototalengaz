@@ -186,38 +186,38 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
           <div className="features-grid">
             <div className="feature-card" data-aos="fade-up" data-aos-delay="100">
               <div className="feature-icon">
-                <i className="fas fa-chart-line"></i>
+                <i className="fas fa-history"></i>
               </div>
               <h3>{t.features.experience}</h3>
               <p>{t.features.experience_desc}</p>
             </div>
             <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
               <div className="feature-icon">
-                <i className="fas fa-shield-alt"></i>
+                <i className="fas fa-building"></i>
               </div>
-              <h3>{t.features.trust}</h3>
-              <p>{t.features.trust_desc}</p>
+              <h3>{t.features.quality}</h3>
+              <p>{t.features.quality_desc}</p>
             </div>
             <div className="feature-card" data-aos="fade-up" data-aos-delay="300">
               <div className="feature-icon">
-                <i className="fas fa-th-large"></i>
+                <i className="fas fa-clock"></i>
               </div>
-              <h3>{t.features.variety}</h3>
-              <p>{t.features.variety_desc}</p>
+              <h3>{t.features.deadlines}</h3>
+              <p>{t.features.deadlines_desc}</p>
             </div>
             <div className="feature-card" data-aos="fade-up" data-aos-delay="400">
               <div className="feature-icon">
-                <i className="fas fa-headset"></i>
+                <i className="fas fa-shield-alt"></i>
               </div>
-              <h3>{t.features.support}</h3>
-              <p>{t.features.support_desc}</p>
+              <h3>{t.features.transparency}</h3>
+              <p>{t.features.transparency_desc}</p>
             </div>
             <div className="feature-card" data-aos="fade-up" data-aos-delay="500">
               <div className="feature-icon">
-                <i className="fas fa-bolt"></i>
+                <i className="fas fa-map-marker-alt"></i>
               </div>
-              <h3>{t.features.speed}</h3>
-              <p>{t.features.speed_desc}</p>
+              <h3>{t.features.locations}</h3>
+              <p>{t.features.locations_desc}</p>
             </div>
           </div>
         </div>

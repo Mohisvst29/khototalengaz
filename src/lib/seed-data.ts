@@ -95,29 +95,7 @@ export const mockProperties = [
   }
 ];
 
-export const mockProjects = [
-  {
-    _id: "p1",
-    title: "مشروع النرجس السكني",
-    description: "مجمع سكني متكامل يضم 24 فيلا مودرن بتصاميم عصرية",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
-    location: "الرياض - حي النرجس"
-  },
-  {
-    _id: "p2",
-    title: "برج الإنجاز التجاري",
-    description: "مبنى تجاري يضم مكاتب فاخرة ومعارض تجارية بمواصفات عالمية",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
-    location: "الرياض - طريق الملك فهد"
-  },
-  {
-    _id: "p3",
-    title: "مجمع الياسمين السكني",
-    description: "شقق سكنية فاخرة بنظام سمارت هوم ومساحات متنوعة",
-    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
-    location: "الرياض - حي الياسمين"
-  }
-];
+export const mockProjects = [];
 
 export const mockBlogs = [
   {

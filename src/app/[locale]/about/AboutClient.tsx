@@ -45,36 +45,51 @@ export default function AboutClient() {
               />
             </div>
             <div className="about-text" data-aos={locale === 'ar' ? 'fade-right' : 'fade-left'}>
-              <h2>
+              <h2 className="mb-6">
                 {t.about.company}
               </h2>
-              <div style={{ whiteSpace: 'pre-wrap' }}>
-                <p>
-                  {locale === 'ar' ? about.content : (about.contentEn || about.content)}
+              <div className="about-description space-y-6">
+                <p className="text-lg leading-relaxed">
+                  {t.about.desc1}
                 </p>
+                
+                <div className="bullets-container">
+                  <p className="font-bold mb-4">{t.about.desc2}</p>
+                  <ul className="about-list">
+                    {t.about.bullets?.map((bullet: string, index: number) => (
+                      <li key={index} className="flex items-center gap-3 mb-3">
+                        <i className="fas fa-check-circle text-primary text-xl"></i>{" "}
+                        <span className="text-gray-700">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="italic font-medium text-primary py-4 border-y border-gray-100 my-6">
+                  {t.about.closing}
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-8 mt-12">
+                  <div className="vision-mission-box p-6 bg-gray-50 rounded-2xl border border-gray-100" data-aos="fade-up">
+                    <h3 className="text-2xl font-bold mb-4 text-primary flex items-center gap-3">
+                      <i className="fas fa-eye"></i>
+                      {t.about.vision_title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {t.about.vision_desc}
+                    </p>
+                  </div>
+                  <div className="vision-mission-box p-6 bg-gray-50 rounded-2xl border border-gray-100" data-aos="fade-up" data-aos-delay="100">
+                    <h3 className="text-2xl font-bold mb-4 text-primary flex items-center gap-3">
+                      <i className="fas fa-bullseye"></i>
+                      {t.about.mission_title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {t.about.mission_desc}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <ul className="about-list">
-                <li>
-                  <i className="fas fa-check-circle"></i>{" "}
-                  <span>{t.features.experience}</span>
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i>{" "}
-                  <span>{t.features.trust}</span>
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i>{" "}
-                  <span>{t.features.variety}</span>
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i>{" "}
-                  <span>{t.features.support}</span>
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i>{" "}
-                  <span>{t.features.speed}</span>
-                </li>
-              </ul>
             </div>
           </div>
 

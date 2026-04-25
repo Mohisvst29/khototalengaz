@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 const FloatingWhatsApp = () => {
-  const [whatsapp, setWhatsapp] = useState("966567337666");
+  const [whatsapp, setWhatsapp] = useState("966566066952");
 
   useEffect(() => {
     fetch("/api/settings")

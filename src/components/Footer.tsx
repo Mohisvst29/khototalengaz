@@ -19,15 +19,15 @@ const Footer = () => {
 
   const branding = settings?.branding || { logo: "/logo.png", logoSize: 60 };
   const contact = settings?.contact || { 
-    phone1: "+966567337666", 
-    phone2: "+966566066952", 
+    phone1: "+966566066952", 
+    phone2: "", 
     email: "info@khototalengaz.com",
     address: "الرياض، السعودية",
     addressEn: "Riyadh, Saudi Arabia",
-    whatsapp: "966567337666"
+    whatsapp: "966566066952"
   };
   const social = settings?.social || {};
-  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966567337666";
+  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966566066952";
 
   return (
     <footer className="footer" id="mainFooter">
@@ -124,11 +124,20 @@ const Footer = () => {
                   </a>
                 </li>
               )}
+              {/* Display Main Email */}
               <li>
                 <a href={`mailto:${contact.email}`}>
                   <i className="fas fa-envelope"></i> {contact.email}
                 </a>
               </li>
+              {/* Display Additional Emails */}
+              {contact.emails && contact.emails.map((email: string, idx: number) => email && (
+                <li key={idx}>
+                  <a href={`mailto:${email}`}>
+                    <i className="fas fa-envelope"></i> {email}
+                  </a>
+                </li>
+              ))}
               <li>
                 <a href="#">
                   <i className="fas fa-map-marker-alt"></i>{" "}

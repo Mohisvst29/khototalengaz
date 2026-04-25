@@ -31,9 +31,29 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+
   const navLinks = [
     { name: t.nav.home, path: `/${locale}` },
     { name: t.nav.about, path: `/${locale}/about` },
+    { 
+      name: t.nav.services, 
+      path: `/${locale}/services`,
+      dropdown: (settings?.serviceList && settings.serviceList.length > 0) 
+        ? settings.serviceList.map((s: any) => ({
+            name: locale === 'ar' ? s.title : s.titleEn,
+            path: `/${locale}/services/${s.slug}`
+          }))
+        : [
+          { name: t.services.list.residential.title, path: `/${locale}/services/residential-development` },
+          { name: t.services.list.restructuring.title, path: `/${locale}/services/building-restructuring` },
+          { name: t.services.list.commercial.title, path: `/${locale}/services/commercial-development` },
+          { name: t.services.list.management.title, path: `/${locale}/services/project-management` },
+          { name: t.services.list.investment.title, path: `/${locale}/services/real-estate-investment` },
+          { name: t.services.list.property_mgmt.title, path: `/${locale}/services/property-management` },
+          { name: t.services.list.sales_leasing.title, path: `/${locale}/services/sales-and-leasing` },
+        ]
+    },
     { name: t.nav.sale, path: `/${locale}/sale` },
     { name: t.nav.rent, path: `/${locale}/rent` },
     { name: t.nav.projects, path: `/${locale}/projects` },
@@ -67,13 +87,31 @@ const Header = () => {
           </Link>
           <nav className="nav-desktop" id="navDesktop">
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={`nav-link ${pathname === link.path ? "active" : ""}`}
-              >
-                {link.name}
-              </Link>
+              link.dropdown ? (
+                <div key={link.path} className="nav-item-dropdown">
+                  <Link
+                    href={link.path}
+                    className={`nav-link ${pathname.includes(link.path) ? "active" : ""}`}
+                  >
+                    {link.name} <i className="fas fa-chevron-down" style={{ fontSize: '10px', marginRight: '5px' }}></i>
+                  </Link>
+                  <div className="dropdown-menu">
+                    {link.dropdown.map((sub) => (
+                      <Link key={sub.path} href={sub.path} className="dropdown-item">
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  className={`nav-link ${pathname === link.path ? "active" : ""}`}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
           </nav>
           <div className="header-actions">
@@ -102,14 +140,38 @@ const Header = () => {
       ></div>
       <div className={`mobile-menu ${isMenuOpen ? "open" : ""}`} id="mobileMenu">
         {navLinks.map((link) => (
-          <Link
-            key={link.path}
-            href={link.path}
-            className="mobile-nav-link"
-            onClick={toggleMobileMenu}
-          >
-            {link.name}
-          </Link>
+          link.dropdown ? (
+            <div key={link.path}>
+              <button 
+                className="mobile-dropdown-btn" 
+                onClick={() => setIsServicesOpen(!isServicesOpen)}
+              >
+                {link.name}
+                <i className={`fas fa-chevron-${isServicesOpen ? 'up' : 'down'}`}></i>
+              </button>
+              <div className={`mobile-dropdown-content ${isServicesOpen ? 'open' : ''}`}>
+                {link.dropdown.map((sub) => (
+                  <Link
+                    key={sub.path}
+                    href={sub.path}
+                    className="mobile-dropdown-item"
+                    onClick={toggleMobileMenu}
+                  >
+                    {sub.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <Link
+              key={link.path}
+              href={link.path}
+              className="mobile-nav-link"
+              onClick={toggleMobileMenu}
+            >
+              {link.name}
+            </Link>
+          )
         ))}
         <div
           style={{

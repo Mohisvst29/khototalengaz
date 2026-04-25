@@ -2,11 +2,53 @@
   "nav": {
     "home": "Home",
     "about": "About Us",
+    "services": "Our Services",
     "sale": "For Sale",
     "rent": "For Rent",
     "projects": "Projects",
     "blog": "Blog",
     "contact": "Contact Us"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Providing integrated real estate solutions with national expertise and global standards",
+    "list": {
+      "residential": {
+        "title": "Residential Project Development",
+        "desc": "We develop modern residential complexes that meet the aspirations of Saudi families, focusing on quality, privacy, and strategic locations.",
+        "slug": "residential-development"
+      },
+      "restructuring": {
+        "title": "Building Restructuring and Development",
+        "desc": "We modernize and rehabilitate existing buildings to increase their operational efficiency and market value in line with modern urban development.",
+        "slug": "building-restructuring"
+      },
+      "commercial": {
+        "title": "Commercial Project Development",
+        "desc": "We develop commercial centers and administrative offices equipped with the latest technologies to serve the business sector and provide an ideal and sustainable work environment.",
+        "slug": "commercial-development"
+      },
+      "management": {
+        "title": "Real Estate Project Management",
+        "desc": "Integrated supervision of all project phases from concept to execution and delivery, ensuring compliance with the specified schedule and budget.",
+        "slug": "project-management"
+      },
+      "investment": {
+        "title": "Real Estate Investment",
+        "desc": "We offer carefully studied investment opportunities to achieve rewarding and sustainable returns for our clients in various real estate sectors.",
+        "slug": "real-estate-investment"
+      },
+      "property_mgmt": {
+        "title": "Property Management",
+        "desc": "Professional services in the management and operation of properties, including maintenance, collection, and tenant relations to ensure owner comfort and return continuity.",
+        "slug": "property-management"
+      },
+      "sales_leasing": {
+        "title": "Sale and Leasing of Real Estate Units",
+        "desc": "We have a professional sales and marketing team to reach the target customer and complete sales and leasing operations with high efficiency and transparency.",
+        "slug": "sales-and-leasing"
+      }
+    }
   },
   "hero": {
     "title": "Developing Real Estate with Modern Standards",
@@ -16,14 +58,14 @@
     "contact_us": "Contact Us"
   },
   "footer": {
-    "desc": "Khotot Al-Engaz Real Estate offers the best real estate solutions in Saudi Arabia. We are committed to credibility and quality in all our dealings.",
+    "desc": "Khotot Al-Engaz Real Estate Development offers the best real estate solutions in Saudi Arabia. We are committed to credibility and quality in all our dealings.",
     "quick_links": "Quick Links",
     "contact_info": "Contact Info",
-    "rights": "All rights reserved © 2026 Khotot Al-Engaz Real Estate"
+    "rights": "All rights reserved © 2026 Khotot Al-Engaz Real Estate Development"
   },
   "home": {
-    "why_choose_us": "Why Choose Khotot Al-Engaz?",
-    "why_subtitle": "We provide integrated real estate solutions combining experience and credibility",
+    "why_choose_us": "Why Us",
+    "why_subtitle": "We provide integrated real estate solutions that combine experience and credibility",
     "latest_units": "Latest Available Units",
     "latest_units_subtitle": "Browse our selected collection of the best properties in the Kingdom",
     "view_all_units": "View All Units",
@@ -35,8 +77,18 @@
     "title": "About Us",
     "subtitle": "Learn about Khotot Al-Engaz Real Estate Development",
     "company": "Khotot Al-Engaz Real Estate Development",
-    "desc1": "We provide integrated real estate solutions including sales, leasing, and management of residential and commercial units. We rely on deep experience in the Saudi real estate market and an understanding of customer needs to offer the best options combining quality, location, and competitive pricing.",
-    "desc2": "We aim to facilitate the search for the right property through professional services and a comfortable user experience."
+    "desc1": "We are a Saudi real estate development company seeking to redefine the concept of housing and investment through innovative projects that combine quality, modern design, and strategic locations.",
+    "desc2": "We have experience in developing residential and commercial projects, and we work according to a clear vision aimed at:",
+    "bullets": [
+      "Improving the quality of life",
+      "Enhancing the investment value of the property",
+      "Commitment to the highest standards of construction and development"
+    ],
+    "closing": "We believe that real estate is not just a building, but a long-term investment and a lifestyle.",
+    "vision_title": "Our Vision",
+    "vision_desc": "To be one of the leading companies in the real estate development sector in the Kingdom of Saudi Arabia, by providing sustainable and innovative projects that add real value to the community.",
+    "mission_title": "Our Mission",
+    "mission_desc": "Developing high-quality real estate projects that meet our customers' aspirations, through innovation, professionalism, and commitment to the highest standards."
   },
   "contact": {
     "title": "Contact Us",
@@ -51,16 +103,16 @@
     "send": "Send Message"
   },
   "features": {
-    "experience": "Saudi Market Experience",
-    "experience_desc": "We have deep experience in the Saudi real estate market and a full understanding of client needs",
-    "trust": "Commitment to Credibility",
-    "trust_desc": "We adhere to the highest standards of transparency and credibility in all our dealings",
-    "variety": "Variety of Options",
-    "variety_desc": "We provide a wide range of residential and commercial units to suit all needs",
-    "support": "Full Customer Support",
-    "support_desc": "A specialized team is ready to assist you every step of the way in choosing the right property",
-    "speed": "Speed in Execution",
-    "speed_desc": "We ensure all transactions are completed quickly and efficiently"
+    "experience": "Saudi Real Estate Market Experience",
+    "experience_desc": "We have deep experience in the Saudi real estate market and a full understanding of market needs.",
+    "quality": "High Construction Quality",
+    "quality_desc": "We are committed to the highest quality standards in all stages of construction and development.",
+    "deadlines": "Commitment to Deadlines",
+    "deadlines_desc": "We ensure that our projects are delivered on time and with high accuracy.",
+    "transparency": "Transparency and Credibility",
+    "transparency_desc": "We deal with complete clarity and absolute transparency with all our clients and partners.",
+    "locations": "Strategic Project Locations",
+    "locations_desc": "We choose our project locations carefully to ensure the best investment value and quality of life."
   },
   "stats": {
     "sold": "Units Sold",
