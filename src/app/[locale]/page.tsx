@@ -4,21 +4,25 @@ import connectToDatabase from "@/lib/mongodb";
 import Property from "@/models/Property";
 import Blog from "@/models/Blog";
 import Settings from "@/models/Settings";
-import { mockProperties, mockBlogs } from "@/lib/seed-data";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params;
-  return {
-    title: locale === 'ar' ? "شركة خطوط الإنجاز للتطوير العقاري " : "Khotot Al-Engaz Real Estate Development | Home",
-    description: locale === 'ar' 
-      ? "شركة خطوط الإنجاز للتطوير العقاري
-نحن شركة تطوير عقاري سعودية نسعى لإعادة تعريف مفهوم السكن والاستثمار من خلال مشاريع مبتكرة تجمع بين الجودة والتصميم العصري والمواقع الاستراتيجية.
+export async function generateMetadata(
+  { params }: { params: { locale: string } }
+): Promise<Metadata> {
 
-نمتلك خبرة في تطوير المشاريع السكنية والتجارية، ونعمل وفق رؤية واضحة تهدف إلى "
-      : "A company specialized in real estate development, investment, and project management, providing integrated solutions that include building rehabilitation, land development, and residential/commercial projects.",
+  const { locale } = params;
+
+  return {
+    title: locale === 'ar'
+      ? "شركة خطوط الإنجاز للتطوير العقاري"
+      : "Khotot Al-Engaz Real Estate Development | Home",
+
+    description: locale === 'ar'
+      ? `شركة خطوط الإنجاز للتطوير العقاري تقدم حلول تطوير واستثمار عقاري في السعودية، تشمل المشاريع السكنية والتجارية وإدارة الأصول بأعلى معايير الجودة.`
+      : "Khotot Al-Engaz is a Saudi real estate development company offering investment, project management, and high-quality residential and commercial projects.",
+
     alternates: {
-      canonical: `/${locale}`,
+      canonical: `https://khotot-alengaz.com/${locale}`,
     },
   };
 }
@@ -26,15 +30,24 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 async function getData() {
   try {
     await connectToDatabase();
-    const properties = await Property.find({ featured: true }).limit(3).lean() || [];
-    const blogs = await Blog.find({}).sort({ createdAt: -1 }).limit(3).lean() || [];
-    const settings = await Settings.findOne({}).lean() || null;
-    
+
+    const properties = await Property.find({ featured: true })
+      .limit(3)
+      .lean();
+
+    const blogs = await Blog.find({})
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .lean();
+
+    const settings = await Settings.findOne({}).lean();
+
     return {
-      properties: properties.length > 0 ? JSON.parse(JSON.stringify(properties)) : [],
-      blogs: blogs.length > 0 ? JSON.parse(JSON.stringify(blogs)) : [],
+      properties: properties ? JSON.parse(JSON.stringify(properties)) : [],
+      blogs: blogs ? JSON.parse(JSON.stringify(blogs)) : [],
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
     };
+
   } catch (error) {
     return {
       properties: [],
@@ -44,14 +57,20 @@ async function getData() {
   }
 }
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
+export default async function Home(
+  { params }: { params: { locale: string } }
+) {
+
+  const { locale } = params;
+
   const { properties, blogs, settings } = await getData();
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": locale === 'ar' ? "خطوط الإنجاز للتطوير العقاري" : "Khotot Al-Engaz Real Estate Development",
+    "name": locale === 'ar'
+      ? "خطوط الإنجاز للتطوير العقاري"
+      : "Khotot Al-Engaz Real Estate Development",
     "url": `https://khotot-alengaz.com/${locale}`,
     "potentialAction": {
       "@type": "SearchAction",
@@ -66,9 +85,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <HomeClient 
-        initialProperties={properties} 
-        initialBlogs={blogs} 
+
+      <HomeClient
+        initialProperties={properties}
+        initialBlogs={blogs}
         settings={settings}
       />
     </>
