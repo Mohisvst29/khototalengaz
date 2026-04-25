@@ -96,7 +96,7 @@ const Header = () => {
                     {link.name} <i className="fas fa-chevron-down" style={{ fontSize: '10px', marginRight: '5px' }}></i>
                   </Link>
                   <div className="dropdown-menu">
-                    {link.dropdown.map((sub) => (
+                    {link.dropdown.map((sub: any) => (
                       <Link key={sub.path} href={sub.path} className="dropdown-item">
                         {sub.name}
                       </Link>
