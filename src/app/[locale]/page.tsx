@@ -10,9 +10,12 @@ import { Metadata } from "next";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: locale === 'ar' ? "شركة خطوط الإنجاز للتطوير العقاري | الرئيسية" : "Khotot Al-Engaz Real Estate Development | Home",
+    title: locale === 'ar' ? "شركة خطوط الإنجاز للتطوير العقاري " : "Khotot Al-Engaz Real Estate Development | Home",
     description: locale === 'ar' 
-      ? "شركة متخصصة في التطوير العقاري والإستثمار وإدارة المشاريع، تقدم حلولاً متكاملة تشمل إعادة تأهيل المباني القديمة واستثمارها وتطوير الأراضي، إنشاء المشاريع السكنية والتجارية، وإدارة الأصول العقارية وفق أعلى المعايير المهنية والهندسية."
+      ? "شركة خطوط الإنجاز للتطوير العقاري
+نحن شركة تطوير عقاري سعودية نسعى لإعادة تعريف مفهوم السكن والاستثمار من خلال مشاريع مبتكرة تجمع بين الجودة والتصميم العصري والمواقع الاستراتيجية.
+
+نمتلك خبرة في تطوير المشاريع السكنية والتجارية، ونعمل وفق رؤية واضحة تهدف إلى "
       : "A company specialized in real estate development, investment, and project management, providing integrated solutions that include building rehabilitation, land development, and residential/commercial projects.",
     alternates: {
       canonical: `/${locale}`,
