@@ -610,8 +610,8 @@ export default function AdminPage() {
                                     updateSetting('hero', 'slides', newSlides);
                                   }
                                 }
-                              </div>
-                            )}
+                              }} 
+                            />
                           </div>
                         </div>
                       </div>
