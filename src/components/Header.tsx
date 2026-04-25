@@ -51,11 +51,12 @@ const Header = () => {
               'sales-and-leasing': 'sales_leasing',
             };
             const key = serviceKeyMap[s.slug];
-            const fallbackName = key ? (t.services.list as any)[key]?.title : s.slug;
+            const fallbackFromTranslation = key ? (t.services.list as any)[key]?.title : null;
+            const finalName = (locale === 'ar' ? s.title : s.titleEn) || fallbackFromTranslation || s.slug || "خدمة عقارية";
             
             return {
-              name: (locale === 'ar' ? s.title : s.titleEn) || fallbackName,
-              path: `/${locale}/services/${s.slug}`
+              name: finalName,
+              path: `/${locale}/services/${s.slug || 'general'}`
             };
           })
         : [
