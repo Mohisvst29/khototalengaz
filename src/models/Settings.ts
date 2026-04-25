@@ -13,7 +13,7 @@ const SettingsSchema = new Schema(
       subtitleEn: { type: String, default: "We are here to help you find your dream home" },
       slides: [
         {
-          url: { type: String, default: "/hero-bg.jpg" },
+          url: { type: String, default: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80" },
           type: { type: String, enum: ["image", "video"], default: "image" },
           title: { type: String, default: "" },
           titleEn: { type: String, default: "" },
@@ -21,7 +21,7 @@ const SettingsSchema = new Schema(
           subtitleEn: { type: String, default: "" },
         }
       ],
-      media: { type: String, default: "/hero-bg.jpg" }, // Fallback
+      media: { type: String, default: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80" }, // Fallback
       mediaType: { type: String, enum: ["image", "video"], default: "image" }, // Fallback
     },
     announcement: {
