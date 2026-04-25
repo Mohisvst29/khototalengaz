@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Building, Search, Phone } from "lucide-react";
+import { Building, Phone } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Hero = () => {
   const params = useParams();
@@ -13,9 +13,16 @@ const Hero = () => {
   const [currentSlide, setCurrentSlide] = React.useState(0);
 
   React.useEffect(() => {
-    fetch("/api/settings").then(res => res.json()).then(data => {
-      if (!data.error) setSettings(data);
-    });
+    const loadSettings = async () => {
+      try {
+        const res = await fetch("/api/settings", { cache: 'no-store' });
+        const data = await res.json();
+        if (!data.error) setSettings(data);
+      } catch (err) {
+        console.error("Failed to load settings:", err);
+      }
+    };
+    loadSettings();
   }, []);
 
   const hero = settings?.hero || {
@@ -23,16 +30,12 @@ const Hero = () => {
     titleEn: "Developing real estate projects with modern standards",
     subtitle: "نوفر وحدات سكنية وتجارية للبيع والإيجار في أفضل مواقع المملكة.",
     subtitleEn: "We provide residential and commercial units for sale and rent in the best locations.",
-    slides: [
-      { 
-        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80", 
-        type: "image",
-        title: "", titleEn: "", subtitle: "", subtitleEn: ""
-      }
-    ]
+    slides: []
   };
 
-  const slides = hero.slides && hero.slides.length > 0 ? hero.slides : [
+  const slides = hero.slides && hero.slides.length > 0 
+    ? hero.slides.filter((s: any) => s.url) // Only use slides with URLs
+    : [
     { 
       url: hero.media || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80", 
       type: hero.mediaType || "image",
@@ -44,71 +47,85 @@ const Hero = () => {
     if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000); // Change slide every 6 seconds
+    }, 6000); 
     return () => clearInterval(timer);
   }, [slides.length]);
 
   const slide = slides[currentSlide];
 
+  if (!slide) return null;
+
   return (
-    <section className="relative h-[100vh] flex items-center justify-center text-center overflow-hidden">
+    <section className="relative h-[100vh] flex items-center justify-center text-center overflow-hidden bg-[#0f2339]">
       {/* Slides Background */}
       <div className="absolute inset-0 z-0">
-        {slides.map((s: any, index: number) => (
+        <AnimatePresence mode="wait">
           <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: currentSlide === index ? 1 : 0 }}
+            key={currentSlide}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
             className="absolute inset-0"
           >
-            {s.type === 'video' ? (
-              <video src={s.url} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+            {slide.type === 'video' ? (
+              <video 
+                src={slide.url} 
+                autoPlay 
+                loop 
+                muted 
+                playsInline 
+                key={slide.url} // Re-load video if URL changes
+                className="absolute inset-0 w-full h-full object-cover" 
+              />
             ) : (
               <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url('${s.url}')` }}
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] scale-110"
+                style={{ backgroundImage: `url('${slide.url}')` }}
               />
             )}
           </motion.div>
-        ))}
-        <div className="absolute inset-0 bg-[#0f2339]/65 z-10" />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-[#0f2339]/60 z-10" />
       </div>
 
       <div className="relative z-20 max-w-[1200px] mx-auto px-6 w-full">
-        <motion.div 
-          key={currentSlide} // Key change triggers re-animation
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center"
-        >
-          <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight">
-            {(locale === 'ar' ? (slide.title || hero.title) : (slide.titleEn || hero.titleEn))}
-          </h1>
-          
-          <p className="text-lg md:text-xl text-white/90 mb-12 max-w-[800px] leading-relaxed">
-            {(locale === 'ar' ? (slide.subtitle || hero.subtitle) : (slide.subtitleEn || hero.subtitleEn))}
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link 
-              href={`/${locale}/sale`} 
-              className="bg-[#c9a227] hover:bg-[#b08e22] text-[#0f2339] px-10 py-4 rounded-md font-bold text-lg flex items-center gap-3 transition-all"
-            >
-              <Building size={22} />
-              {locale === 'ar' ? 'عرض الوحدات' : 'View Units'}
-            </Link>
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={currentSlide}
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -30, opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center"
+          >
+            <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight">
+              {(locale === 'ar' ? (slide.title || hero.title) : (slide.titleEn || hero.titleEn))}
+            </h1>
             
-            <Link 
-              href={`/${locale}/contact`} 
-              className="border-2 border-white text-white hover:bg-white hover:text-[#0f2339] px-10 py-4 rounded-md font-bold text-lg flex items-center gap-3 transition-all"
-            >
-              <Phone size={22} />
-              {locale === 'ar' ? 'تواصل معنا' : 'Contact Us'}
-            </Link>
-          </div>
-        </motion.div>
+            <p className="text-lg md:text-xl text-white/90 mb-12 max-w-[800px] leading-relaxed">
+              {(locale === 'ar' ? (slide.subtitle || hero.subtitle) : (slide.subtitleEn || hero.subtitleEn))}
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link 
+                href={`/${locale}/sale`} 
+                className="bg-[#c9a227] hover:bg-[#b08e22] text-[#0f2339] px-10 py-4 rounded-md font-bold text-lg flex items-center gap-3 transition-all"
+              >
+                <Building size={22} />
+                {locale === 'ar' ? 'عرض الوحدات' : 'View Units'}
+              </Link>
+              
+              <Link 
+                href={`/${locale}/contact`} 
+                className="border-2 border-white text-white hover:bg-white hover:text-[#0f2339] px-10 py-4 rounded-md font-bold text-lg flex items-center gap-3 transition-all"
+              >
+                <Phone size={22} />
+                {locale === 'ar' ? 'تواصل معنا' : 'Contact Us'}
+              </Link>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Slide Indicators */}
