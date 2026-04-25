@@ -17,7 +17,10 @@ const Hero = () => {
       try {
         const res = await fetch("/api/settings", { cache: 'no-store' });
         const data = await res.json();
-        if (!data.error) setSettings(data);
+        if (!data.error) {
+          console.log("Hero settings loaded:", data.hero);
+          setSettings(data);
+        }
       } catch (err) {
         console.error("Failed to load settings:", err);
       }
@@ -25,23 +28,32 @@ const Hero = () => {
     loadSettings();
   }, []);
 
-  const hero = settings?.hero || {
-    title: "نطور مشاريع عقارية بمعايير حديثة",
-    titleEn: "Developing real estate projects with modern standards",
-    subtitle: "نوفر وحدات سكنية وتجارية للبيع والإيجار في أفضل مواقع المملكة.",
-    subtitleEn: "We provide residential and commercial units for sale and rent in the best locations.",
-    slides: []
+  // Prepare slides with all possible fallbacks
+  const getSlides = () => {
+    const hero = settings?.hero;
+    let slidesList = [];
+
+    if (hero?.slides && hero.slides.length > 0) {
+      // Use slides from settings if they exist and have URLs
+      slidesList = hero.slides.filter((s: any) => s.url);
+    }
+
+    // If no slides found in the array, fall back to the main hero media
+    if (slidesList.length === 0) {
+      slidesList = [{
+        url: hero?.media || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
+        type: hero?.mediaType || "image",
+        title: hero?.title || "خطوط الإنجاز للتطوير العقاري",
+        titleEn: hero?.titleEn || "Khotot Al-Engaz Real Estate Development",
+        subtitle: hero?.subtitle || "نطور مشاريع عقارية بمعايير حديثة",
+        subtitleEn: hero?.subtitleEn || "Developing real estate projects with modern standards"
+      }];
+    }
+
+    return slidesList;
   };
 
-  const slides = hero.slides && hero.slides.length > 0 
-    ? hero.slides.filter((s: any) => s.url) // Only use slides with URLs
-    : [
-    { 
-      url: hero.media || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80", 
-      type: hero.mediaType || "image",
-      title: hero.title, titleEn: hero.titleEn, subtitle: hero.subtitle, subtitleEn: hero.subtitleEn
-    }
-  ];
+  const slides = getSlides();
 
   React.useEffect(() => {
     if (slides.length <= 1) return;
@@ -51,19 +63,17 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  const slide = slides[currentSlide];
-
-  if (!slide) return null;
+  const slide = slides[currentSlide] || slides[0];
 
   return (
     <section className="relative h-[100vh] flex items-center justify-center text-center overflow-hidden bg-[#0f2339]">
       {/* Slides Background */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
+            key={`slide-${currentSlide}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
             className="absolute inset-0"
@@ -75,12 +85,12 @@ const Hero = () => {
                 loop 
                 muted 
                 playsInline 
-                key={slide.url} // Re-load video if URL changes
+                key={slide.url}
                 className="absolute inset-0 w-full h-full object-cover" 
               />
             ) : (
               <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-[6000ms] scale-110"
+                className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url('${slide.url}')` }}
               />
             )}
@@ -92,7 +102,7 @@ const Hero = () => {
       <div className="relative z-20 max-w-[1200px] mx-auto px-6 w-full">
         <AnimatePresence mode="wait">
           <motion.div 
-            key={currentSlide}
+            key={`text-${currentSlide}`}
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -30, opacity: 0 }}
@@ -100,11 +110,11 @@ const Hero = () => {
             className="flex flex-col items-center"
           >
             <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight">
-              {(locale === 'ar' ? (slide.title || hero.title) : (slide.titleEn || hero.titleEn))}
+              {locale === 'ar' ? (slide.title || settings?.hero?.title) : (slide.titleEn || settings?.hero?.titleEn)}
             </h1>
             
             <p className="text-lg md:text-xl text-white/90 mb-12 max-w-[800px] leading-relaxed">
-              {(locale === 'ar' ? (slide.subtitle || hero.subtitle) : (slide.subtitleEn || hero.subtitleEn))}
+              {locale === 'ar' ? (slide.subtitle || settings?.hero?.subtitle) : (slide.subtitleEn || settings?.hero?.subtitleEn)}
             </p>
             
             <div className="flex flex-wrap justify-center gap-4">

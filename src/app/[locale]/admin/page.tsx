@@ -96,6 +96,16 @@ export default function AdminPage() {
       const mergedSettings = (settings && !settings.error) ? {
         ...data.settings,
         ...settings,
+        hero: {
+          ...data.settings.hero,
+          ...(settings.hero || {}),
+          slides: settings.hero?.slides || data.settings.hero.slides || []
+        },
+        contact: {
+          ...data.settings.contact,
+          ...(settings.contact || {}),
+          emails: settings.contact?.emails || data.settings.contact.emails || []
+        },
         serviceList: (settings.serviceList && settings.serviceList.length >= 7) 
           ? settings.serviceList 
           : data.settings.serviceList.map((defaultService: any) => {
