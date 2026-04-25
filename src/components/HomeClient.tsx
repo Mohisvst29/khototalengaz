@@ -224,62 +224,64 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
       </section>
 
       {/* Featured Properties Section */}
-      <section className="section">
-        <div className="container">
-          <div className="section-header" data-aos="fade-up">
-            <h2>{t.home.latest_units}</h2>
-            <p>{t.home.latest_units_subtitle}</p>
-          </div>
-          <div
-            className="properties-grid"
-            id="featuredProperties"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            {featuredProperties.map((p: any) => (
-              <div key={p._id} className="property-card">
-                <div className="property-image">
-                  <img 
-                    src={p.images?.[0] || p.image || "/placeholder-property.jpg"} 
-                    alt={p.title} 
-                    loading="lazy" 
-                  />
-                  <span className={`property-badge ${p.category === 'rent' ? 'rent' : ''}`}>
-                    {p.category === 'sale' ? t.property.sale : t.property.rent}
-                  </span>
+      {featuredProperties.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-header" data-aos="fade-up">
+              <h2>{t.home.latest_units}</h2>
+              <p>{t.home.latest_units_subtitle}</p>
+            </div>
+            <div
+              className="properties-grid"
+              id="featuredProperties"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              {featuredProperties.map((p: any) => (
+                <div key={p._id} className="property-card">
+                  <div className="property-image">
+                    <img 
+                      src={p.images?.[0] || p.image || "/placeholder-property.jpg"} 
+                      alt={p.title} 
+                      loading="lazy" 
+                    />
+                    <span className={`property-badge ${p.category === 'rent' ? 'rent' : ''}`}>
+                      {p.category === 'sale' ? t.property.sale : t.property.rent}
+                    </span>
+                  </div>
+                  <div className="property-content">
+                    <div className="property-price">
+                      {p.price?.toLocaleString()} {t.property.sar}
+                    </div>
+                    <h3 className="property-title">{p.title}</h3>
+                    <div className="property-location">
+                      <i className="fas fa-map-marker-alt"></i>
+                      {p.location}
+                    </div>
+                    <div className="property-meta">
+                      <span>
+                        <i className="fas fa-bed"></i> {p.rooms} {t.property.rooms}
+                      </span>
+                      <span>
+                        <i className="fas fa-ruler-combined"></i> {p.area} {t.property.area}
+                      </span>
+                      <span>
+                        <i className="fas fa-home"></i> {t.property[p.type] || p.type}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="property-content">
-                  <div className="property-price">
-                    {p.price?.toLocaleString()} {t.property.sar}
-                  </div>
-                  <h3 className="property-title">{p.title}</h3>
-                  <div className="property-location">
-                    <i className="fas fa-map-marker-alt"></i>
-                    {p.location}
-                  </div>
-                  <div className="property-meta">
-                    <span>
-                      <i className="fas fa-bed"></i> {p.rooms} {t.property.rooms}
-                    </span>
-                    <span>
-                      <i className="fas fa-ruler-combined"></i> {p.area} {t.property.area}
-                    </span>
-                    <span>
-                      <i className="fas fa-home"></i> {t.property[p.type] || p.type}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="text-center mt-4">
+              <Link href={`/${locale}/sale`} className="btn btn-outline">
+                <span>{t.home.view_all_units}</span>
+                <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
+              </Link>
+            </div>
           </div>
-          <div className="text-center mt-4">
-            <Link href={`/${locale}/sale`} className="btn btn-outline">
-              <span>{t.home.view_all_units}</span>
-              <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="section stats-section">
         <div className="container">
@@ -313,54 +315,56 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
       </section>
 
       {/* Latest Blog Section */}
-      <section className="section" style={{ background: "var(--secondary)" }}>
-        <div className="container">
-          <div className="section-header" data-aos="fade-up">
-            <h2>{t.home.latest_blog}</h2>
-            <p>{t.home.blog_subtitle}</p>
-          </div>
-          <div className="properties-grid">
-            {latestBlogs.map((post: any) => (
-              <Link
-                key={post._id}
-                href={`/${locale}/blog/${post.slug}`}
-                className="property-card"
-                data-aos="fade-up"
-              >
-                <div className="property-image">
-                  <img src={post.image} alt={post.title} loading="lazy" />
-                  <span className="property-badge">{locale === 'ar' ? 'مقال' : 'Article'}</span>
-                </div>
-                <div className="property-content">
-                  <div className="property-price" style={{ fontSize: "14px" }}>
-                    {new Date(post.createdAt).toLocaleDateString(locale === 'ar' ? "ar-SA" : "en-US")}
+      {latestBlogs.length > 0 && (
+        <section className="section" style={{ background: "var(--secondary)" }}>
+          <div className="container">
+            <div className="section-header" data-aos="fade-up">
+              <h2>{t.home.latest_blog}</h2>
+              <p>{t.home.blog_subtitle}</p>
+            </div>
+            <div className="properties-grid">
+              {latestBlogs.map((post: any) => (
+                <Link
+                  key={post._id}
+                  href={`/${locale}/blog/${post.slug}`}
+                  className="property-card"
+                  data-aos="fade-up"
+                >
+                  <div className="property-image">
+                    <img src={post.image} alt={post.title} loading="lazy" />
+                    <span className="property-badge">{locale === 'ar' ? 'مقال' : 'Article'}</span>
                   </div>
-                  <h3 className="property-title">{post.title}</h3>
-                  <p
-                    style={{
-                      color: "var(--text-light)",
-                      fontSize: "14px",
-                      marginTop: "10px",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {post.content}
-                  </p>
-                </div>
+                  <div className="property-content">
+                    <div className="property-price" style={{ fontSize: "14px" }}>
+                      {new Date(post.createdAt).toLocaleDateString(locale === 'ar' ? "ar-SA" : "en-US")}
+                    </div>
+                    <h3 className="property-title">{post.title}</h3>
+                    <p
+                      style={{
+                        color: "var(--text-light)",
+                        fontSize: "14px",
+                        marginTop: "10px",
+                        display: "-webkit-box",
+                        WebkitLineClamp: "2",
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {post.content}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-4">
+              <Link href={`/${locale}/blog`} className="btn btn-outline">
+                <span>{t.home.view_all_posts}</span>
+                <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
               </Link>
-            ))}
+            </div>
           </div>
-          <div className="text-center mt-4">
-            <Link href={`/${locale}/blog`} className="btn btn-outline">
-              <span>{t.home.view_all_posts}</span>
-              <i className={`fas fa-arrow-${locale === 'ar' ? 'left' : 'right'}`}></i>
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

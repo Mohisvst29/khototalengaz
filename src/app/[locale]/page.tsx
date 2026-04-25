@@ -28,14 +28,14 @@ async function getData() {
     const settings = await Settings.findOne({}).lean() || null;
     
     return {
-      properties: properties.length > 0 ? JSON.parse(JSON.stringify(properties)) : mockProperties.slice(0, 3),
-      blogs: blogs.length > 0 ? JSON.parse(JSON.stringify(blogs)) : mockBlogs.slice(0, 3),
+      properties: properties.length > 0 ? JSON.parse(JSON.stringify(properties)) : [],
+      blogs: blogs.length > 0 ? JSON.parse(JSON.stringify(blogs)) : [],
       settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
     };
   } catch (error) {
     return {
-      properties: mockProperties.slice(0, 3),
-      blogs: mockBlogs.slice(0, 3),
+      properties: [],
+      blogs: [],
       settings: null,
     };
   }
