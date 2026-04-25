@@ -66,10 +66,10 @@ const SettingsSchema = new Schema(
       }
     ],
     seo: {
-      metaTitle: { type: String, default: "خطوط الإنجاز للتطوير العقاري | أفضل عقارات للبيع والإيجار في الرياض" },
-      metaTitleEn: { type: String, default: "Khotot Al-Engaz Real Estate Development | Best Properties for Sale and Rent in Riyadh" },
-      metaDescription: { type: String, default: "شركة خطوط الإنجاز للتطوير العقاري تقدم أفضل الحلول العقارية في المملكة العربية السعودية." },
-      metaDescriptionEn: { type: String, default: "Khotot Al-Engaz Real Estate Development offers the best real estate solutions in Saudi Arabia." },
+      metaTitle: { type: String, default: "شركة خطوط الإنجاز للتطوير العقاري | تطوير، استثمار، إدارة مشاريع" },
+      metaTitleEn: { type: String, default: "Khotot Al-Engaz Real Estate Development | Development, Investment, Management" },
+      metaDescription: { type: String, default: "شركة متخصصة في التطوير العقاري والإستثمار وإدارة المشاريع، تقدم حلولاً متكاملة تشمل إعادة تأهيل المباني القديمة واستثمارها وتطوير الأراضي، إنشاء المشاريع السكنية والتجارية." },
+      metaDescriptionEn: { type: String, default: "Specialized in real estate development, investment, and project management, providing integrated solutions for residential and commercial projects." },
       keywords: { type: String, default: "عقارات، الرياض، شقق للبيع، فيلات" },
       keywordsEn: { type: String, default: "real estate, Riyadh, apartments for sale, villas" },
     },
