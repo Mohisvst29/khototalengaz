@@ -40,10 +40,24 @@ const Header = () => {
       name: t.nav.services, 
       path: `/${locale}/services`,
       dropdown: (settings?.serviceList && settings.serviceList.length > 0) 
-        ? settings.serviceList.map((s: any) => ({
-            name: locale === 'ar' ? s.title : s.titleEn,
-            path: `/${locale}/services/${s.slug}`
-          }))
+        ? settings.serviceList.map((s: any) => {
+            const serviceKeyMap: any = {
+              'residential-development': 'residential',
+              'building-restructuring': 'restructuring',
+              'commercial-development': 'commercial',
+              'project-management': 'management',
+              'real-estate-investment': 'investment',
+              'property-management': 'property_mgmt',
+              'sales-and-leasing': 'sales_leasing',
+            };
+            const key = serviceKeyMap[s.slug];
+            const fallbackName = key ? (t.services.list as any)[key]?.title : s.slug;
+            
+            return {
+              name: (locale === 'ar' ? s.title : s.titleEn) || fallbackName,
+              path: `/${locale}/services/${s.slug}`
+            };
+          })
         : [
           { name: t.services.list.residential.title, path: `/${locale}/services/residential-development` },
           { name: t.services.list.restructuring.title, path: `/${locale}/services/building-restructuring` },
