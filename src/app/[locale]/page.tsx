@@ -15,7 +15,7 @@ export async function generateMetadata(
   return {
     title: locale === 'ar'
       ? "شركة خطوط الإنجاز للتطوير العقاري"
-      : "Khotot Al-Engaz Real Estate Development | Home",
+      : "Khotot Al-Engaz Real Estate Development",
 
     description: locale === 'ar'
       ? `شركة خطوط الإنجاز للتطوير العقاري تقدم حلول تطوير واستثمار عقاري في السعودية، تشمل المشاريع السكنية والتجارية وإدارة الأصول بأعلى معايير الجودة.`

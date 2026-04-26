@@ -83,10 +83,10 @@ const Header = () => {
   };
 
   const branding = settings?.branding || { logo: "/logo.png", logoSize: 60 };
-  const contact = settings?.contact || { whatsapp: "966567337666" };
+  const contact = settings?.contact || { whatsapp: "966566066952" };
   const announcement = settings?.announcement || { enabled: true, text: "", textEn: "", color: "#1a3a5c", speed: 30 };
 
-  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966567337666";
+  const sanitizedWhatsapp = contact.whatsapp?.replace(/\D/g, "") || "966566066952";
 
   return (
     <>

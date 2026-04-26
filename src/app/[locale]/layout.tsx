@@ -27,9 +27,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const seo = settings?.seo || {};
   const branding = settings?.branding || { logo: "/favicon.ico" };
   
+  let title = locale === 'ar' ? (seo.metaTitle || "خطوط الإنجاز للتطوير العقاري") : (seo.metaTitleEn || "Khotot Al-Engaz Real Estate Development");
+  let description = locale === 'ar' ? seo.metaDescription : seo.metaDescriptionEn;
+
+  // Ensure 'للعقارات' is replaced with 'للتطوير العقاري' if present in the database values
+  if (locale === 'ar' && title) {
+    title = title.replace("للعقارات", "للتطوير العقاري");
+  }
+  if (locale === 'ar' && description) {
+    description = description.replace("للعقارات", "للتطوير العقاري");
+  }
+  
   return {
-    title: locale === 'ar' ? (seo.metaTitle || "خطوط الإنجاز") : (seo.metaTitleEn || "Khotot Al-Engaz"),
-    description: locale === 'ar' ? seo.metaDescription : seo.metaDescriptionEn,
+    title: title,
+    description: description,
     keywords: locale === 'ar' ? seo.keywords : seo.keywordsEn,
     icons: {
       icon: branding.logo || "/favicon.ico",
