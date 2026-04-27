@@ -16,27 +16,33 @@ export default function ContactClient() {
     email: "",
     message: "",
   });
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState<any>(null);
 
   React.useEffect(() => {
-    fetch("/api/settings").then(res => res.json()).then(data => {
-      if (!data.error) setSettings(data);
-    });
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) setSettings(data);
+      });
   }, []);
 
-  const contactInfo = settings?.contact || {
-    phone1: "+966566066952",
-    phone2: "",
-    email: "info@khototalengaz.com",
-    address: "الرياض، المملكة العربية السعودية",
-    addressEn: "Riyadh, Saudi Arabia",
-    whatsapp: "966566066952",
-    mapLink: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3622.356!2d46.6753!3d24.7136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus"
-  };
+  // ✅ الحل النهائي (بدون default غلط)
+  const contactInfo = settings?.contact;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // ✅ Loading احترافي بدل ما يظهر رقم غلط
+  if (!contactInfo) {
+    return (
+      <div style={{ padding: "60px", textAlign: "center" }}>
+        <h2>جاري تحميل بيانات التواصل...</h2>
+      </div>
+    );
+  }
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -52,13 +58,23 @@ export default function ContactClient() {
       });
 
       if (res.ok) {
-        toast.success(locale === 'ar' ? "تم إرسال رسالتك بنجاح!" : "Message sent successfully!");
+        toast.success(
+          locale === "ar"
+            ? "تم إرسال رسالتك بنجاح!"
+            : "Message sent successfully!"
+        );
         setFormData({ name: "", phone: "", email: "", message: "" });
       } else {
-        toast.error(locale === 'ar' ? "حدث خطأ أثناء الإرسال." : "Error sending message.");
+        toast.error(
+          locale === "ar"
+            ? "حدث خطأ أثناء الإرسال."
+            : "Error sending message."
+        );
       }
     } catch (error) {
-      toast.error(locale === 'ar' ? "خطأ في الاتصال." : "Connection error.");
+      toast.error(
+        locale === "ar" ? "خطأ في الاتصال." : "Connection error."
+      );
     } finally {
       setLoading(false);
     }
@@ -66,31 +82,32 @@ export default function ContactClient() {
 
   const getMapSrc = (link: string) => {
     if (!link) return "";
-    
-    // 1. If it's a full iframe tag, extract the src
-    // Using a more robust regex for src attribute
+
     if (link.includes("<iframe") || link.includes("<IFRAME")) {
       const match = link.match(/src=["']([^"']+)["']/i);
       if (match && match[1]) return match[1];
     }
-    
-    // 2. Remove any accidental whitespace or quotes if they just pasted the URL with quotes
-    let cleanLink = link.trim().replace(/^["']|["']$/g, '');
 
-    // 3. If it's a short link (maps.app.goo.gl)
+    let cleanLink = link.trim().replace(/^["']|["']$/g, "");
+
     if (cleanLink.includes("maps.app.goo.gl")) {
-      return cleanLink; 
+      return cleanLink;
     }
 
-    // 4. Handle regular google maps URLs by converting to legacy embed format
-    if (cleanLink.includes("google.com/maps") && !cleanLink.includes("output=embed") && !cleanLink.includes("/embed")) {
+    if (
+      cleanLink.includes("google.com/maps") &&
+      !cleanLink.includes("output=embed") &&
+      !cleanLink.includes("/embed")
+    ) {
       const qMatch = cleanLink.match(/place\/([^\/]+)/);
-      if (qMatch) return `https://maps.google.com/maps?q=${qMatch[1]}&output=embed`;
-      
+      if (qMatch)
+        return `https://maps.google.com/maps?q=${qMatch[1]}&output=embed`;
+
       const coordMatch = cleanLink.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-      if (coordMatch) return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
-      
-      return cleanLink.split('?')[0] + "?output=embed";
+      if (coordMatch)
+        return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
+
+      return cleanLink.split("?")[0] + "?output=embed";
     }
 
     return cleanLink;
@@ -104,51 +121,84 @@ export default function ContactClient() {
           <p>{t.contact.subtitle}</p>
         </div>
       </div>
+
       <section className="section">
         <div className="container">
           <div className="contact-grid">
             <div className="contact-info">
               <h3>{t.contact.info_title}</h3>
+
+              {/* 📞 Phone */}
               <div className="contact-item">
                 <i className="fas fa-phone"></i>
                 <div>
-                  <h4>{locale === 'ar' ? 'اتصل بنا' : 'Call Us'}</h4>
-                  <a href={`tel:${contactInfo.phone1}`}>{contactInfo.phone1}</a>
+                  <h4>{locale === "ar" ? "اتصل بنا" : "Call Us"}</h4>
+                  <a href={`tel:${contactInfo.phone1}`}>
+                    {contactInfo.phone1}
+                  </a>
+
                   {contactInfo.phone2 && (
                     <>
                       <br />
-                      <a href={`tel:${contactInfo.phone2}`}>{contactInfo.phone2}</a>
+                      <a href={`tel:${contactInfo.phone2}`}>
+                        {contactInfo.phone2}
+                      </a>
                     </>
                   )}
                 </div>
               </div>
+
+              {/* 📧 Email */}
               <div className="contact-item">
                 <i className="fas fa-envelope"></i>
                 <div>
                   <h4>{t.contact.email}</h4>
-                  <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
-                  {contactInfo.emails && contactInfo.emails.map((email: string, idx: number) => email && (
-                    <React.Fragment key={idx}>
-                      <br />
-                      <a href={`mailto:${email}`}>{email}</a>
-                    </React.Fragment>
-                  ))}
+                  <a href={`mailto:${contactInfo.email}`}>
+                    {contactInfo.email}
+                  </a>
+
+                  {contactInfo.emails &&
+                    contactInfo.emails.map(
+                      (email: string, idx: number) =>
+                        email && (
+                          <React.Fragment key={idx}>
+                            <br />
+                            <a href={`mailto:${email}`}>{email}</a>
+                          </React.Fragment>
+                        )
+                    )}
                 </div>
               </div>
+
+              {/* 📍 Location */}
               <div className="contact-item">
                 <i className="fas fa-map-marker-alt"></i>
                 <div>
-                  <h4>{locale === 'ar' ? 'الموقع' : 'Location'}</h4>
-                  <span>{locale === 'ar' ? contactInfo.address : (contactInfo.addressEn || contactInfo.address)}</span>
+                  <h4>{locale === "ar" ? "الموقع" : "Location"}</h4>
+                  <span>
+                    {locale === "ar"
+                      ? contactInfo.address
+                      : contactInfo.addressEn || contactInfo.address}
+                  </span>
                 </div>
               </div>
+
+              {/* 💬 WhatsApp */}
               <div className="contact-item">
                 <i className="fab fa-whatsapp"></i>
                 <div>
                   <h4>WhatsApp</h4>
-                  <a href={`https://wa.me/${contactInfo.whatsapp}`} target="_blank" rel="noopener noreferrer">+{contactInfo.whatsapp}</a>
+                  <a
+                    href={`https://wa.me/${contactInfo.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    +{contactInfo.whatsapp}
+                  </a>
                 </div>
               </div>
+
+              {/* 📩 Form */}
               <form style={{ marginTop: "32px" }} onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>{t.contact.name}</label>
@@ -161,6 +211,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                   />
                 </div>
+
                 <div className="form-group">
                   <label>{t.contact.phone}</label>
                   <input
@@ -172,6 +223,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                   />
                 </div>
+
                 <div className="form-group">
                   <label>{t.contact.email}</label>
                   <input
@@ -182,6 +234,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                   />
                 </div>
+
                 <div className="form-group">
                   <label>{t.contact.message}</label>
                   <textarea
@@ -193,6 +246,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                   ></textarea>
                 </div>
+
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -200,17 +254,25 @@ export default function ContactClient() {
                   disabled={loading}
                 >
                   <i className="fas fa-paper-plane"></i>
-                  <span>{loading ? (locale === 'ar' ? 'جاري الإرسال...' : 'Sending...') : t.contact.send}</span>
+                  <span>
+                    {loading
+                      ? locale === "ar"
+                        ? "جاري الإرسال..."
+                        : "Sending..."
+                      : t.contact.send}
+                  </span>
                 </button>
               </form>
             </div>
+
+            {/* 🗺️ Map */}
             <div className="map-container">
               <iframe
                 src={getMapSrc(contactInfo.mapLink)}
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: "500px" }}
-                allowFullScreen={true}
+                allowFullScreen
                 loading="lazy"
               ></iframe>
             </div>
