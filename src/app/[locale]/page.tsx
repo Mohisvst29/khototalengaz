@@ -70,7 +70,7 @@ export default async function Home(
     "@type": "WebSite",
     "name": locale === 'ar'
       ? "خطوط الإنجاز للتطوير العقاري"
-      : "Khotot Al-Engaz Real Estate Development",
+      : "خطوط الإنجاز للتطوير العقاري",
     "url": `https://khotot-alengaz.com/${locale}`,
     "potentialAction": {
       "@type": "SearchAction",
