@@ -41,7 +41,7 @@ const Hero = () => {
       list = [{
         url: (hero?.media && hero.media.length > 2) ? hero.media : "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80",
         type: hero?.mediaType || "image",
-        title: hero?.title || "شركة خطوط الإنجاز للتطوير العقاري",
+        title: hero?.title || "خطوط الانجاز للتطوير العقاري",
         titleEn: hero?.titleEn || "Khotot Al-Engaz Real Estate Development",
         subtitle: hero?.subtitle || "نحن هنا لنساعدك في العثور على بيت أحلامك",
         subtitleEn: hero?.subtitleEn || "We are here to help you find your dream home"

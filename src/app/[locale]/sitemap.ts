@@ -5,7 +5,7 @@ import Property from "@/models/Property";
 import { mockBlogs, mockProperties } from "@/lib/seed-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://khotot-alengaz.com";
+  const baseUrl = "https://khototalengaz.com";
 
   // Static routes
   const staticRoutes = [

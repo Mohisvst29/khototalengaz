@@ -83,7 +83,7 @@ export default async function BlogPost({
     "author": [{
       "@type": "Person",
       "name": locale === 'ar' ? "إدارة خطوط الإنجاز" : "Khotot Al-Engaz Management",
-      "url": "https://khotot-alengaz.com"
+      "url": "https://khototalengaz.com"
     }]
   };
 

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/admin/",
     },
-    sitemap: "https://khotot-alengaz.com/sitemap.xml",
+    sitemap: "https://khototalengaz.com/sitemap.xml",
   };
 }

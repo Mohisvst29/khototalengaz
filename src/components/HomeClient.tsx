@@ -17,8 +17,8 @@ export default function HomeClient({ initialProperties, initialBlogs, settings }
   const t = getTranslation(locale);
 
   const hero = settings?.hero || {
-    title: t.hero.title,
-    titleEn: t.hero.title,
+    title: "خطوط الانجاز للتطوير العقاري",
+    titleEn: "Khotot Al-Engaz Real Estate Development",
     subtitle: t.hero.subtitle,
     subtitleEn: t.hero.subtitle,
     media: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
